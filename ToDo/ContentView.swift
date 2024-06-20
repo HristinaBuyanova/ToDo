@@ -1,9 +1,4 @@
-//
-//  ContentView.swift
-//  ToDo
-//
-//  Created by Христина Буянова on 17.06.2024.
-//
+
 
 import SwiftUI
 
