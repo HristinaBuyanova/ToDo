@@ -8,35 +8,35 @@ class FileCache {
         if !toDoItems.contains(where: { $0.id == item.id }) {
             toDoItems.append(item)
         }
-//        saveData?
     }
 
     func deleteToDoItems(_ item: TodoItem) {
         if let index = toDoItems.firstIndex(where: { $0 == item}) {
             toDoItems.remove(at: index)
         }
-//        saveData?
     }
 
-    func saveTodoListToFile(item: TodoItem) throws {
-        let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("todoList.json")
+    func saveTodoItemsToFile(item: TodoItem) throws {
+        guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("todoList.json") else { throw FileCacheError.errorSave }
 
         let todoListData = try JSONSerialization.data(withJSONObject: item.json)
             try todoListData.write(to: fileURL)
         }
 
-    func loadTodoListFromFile() throws {
-        guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("todoList.json") else { throw FileCacheError.one }
+
+    func loadTodoItemsFromFile() throws -> TodoItem? {
+        guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("todoList.json") else { throw FileCacheError.errorLoad }
 
         let data = try Data(contentsOf: fileURL)
         let toDoItems = try JSONSerialization.jsonObject(with: data)
+        return TodoItem.parse(json: toDoItems)
 //                let toDoItems = try JSONDecoder().decode([TodoItem].self, from: data)
-        self.toDoItems = TodoItem.parse(json: toDoItems)
+//        self.toDoItems = TodoItem.parse(json: toDoItems)
         }
 
     enum FileCacheError: Error {
-        case one
-        case two
+        case errorSave
+        case errorLoad
     }
 
 }

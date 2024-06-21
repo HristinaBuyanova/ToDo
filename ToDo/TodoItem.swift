@@ -21,7 +21,7 @@ struct TodoItem: Equatable {
         deadline: Date? = nil,
         isDone: Bool = false,
         creationDate: Date = Date(),
-         modifiedDate: Date? = nil
+        modifiedDate: Date? = nil
     )
     {
         self.id = id
@@ -48,7 +48,7 @@ extension TodoItem {
 
         if let deadline = self.deadline {
             dict["deadline"] = dateFormatter.string(from: deadline)
-        }
+        } 
 
         if important != .ordinary {
             dict["important"] = self.important.rawValue
@@ -77,20 +77,64 @@ extension TodoItem {
         }
 
         var deadline: Date?
-            if let deadlineString = dict["deadline"] as? String {
-                deadline = dateFormatter.date(from: deadlineString)
-            }
+        if let deadlineString = dict["deadline"] as? String {
+            deadline = dateFormatter.date(from: deadlineString)
+        }
 
 
         var important: Importance
         if let importantValue = dict["important"] as? String {
             important = TodoItem.Importance(rawValue: importantValue) ?? Importance.ordinary
-
-        var modifiedDate: Date?
+        } else {
+            important = Importance.ordinary
+        }
+            var modifiedDate: Date?
             if let modifiedDateString = dict["modifiedDate"] as? String {
                 modifiedDate = dateFormatter.date(from: modifiedDateString)
             }
 
+        return TodoItem(
+            id: id,
+            text: text,
+            important: important,
+            deadline: deadline,
+            isDone: isDone,
+            creationDate: creationDate,
+            modifiedDate: modifiedDate
+        )
+    }
+
+        func loadCVS(from cvs: String) -> TodoItem? {
+            let components = cvs.components(separatedBy: ",")
+            guard components.count >= 4 else { return nil }
+
+            let id = components[0]
+            let text = components[1]
+
+            var important: Importance
+            if let importantStr = Importance(rawValue: components[2]) {
+                important = importantStr
+            } else {
+                important = Importance.ordinary
+            }
+
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+
+            let deadlineString = components[3]
+            let deadline = dateFormatter.date(from: deadlineString)
+
+            let isDone = if components[4] == "true" {
+                true
+            } else {
+                false
+            }
+
+            let creationDateString = components[5]
+            let creationDate = dateFormatter.date(from: creationDateString) ?? Date.now
+
+            let modifiedDateString = components[6]
+            let modifiedDate = dateFormatter.date(from: modifiedDateString)
 
             return TodoItem(
                 id: id,
@@ -102,36 +146,5 @@ extension TodoItem {
                 modifiedDate: modifiedDate
             )
         }
-
-    func loadCVS(from cvs: String) -> TodoItem? {
-        let components = cvs.components(separatedBy: ",")
-        guard components.count >= 4 else { return nil }
-
-        let id = components[0]
-        let text = components[1]
-        if let important = Importance(rawValue: components[2]) {
-            let important = Importance(rawValue: components[2])
-        } else {
-            let important = Importance.ordinary
-        }
-
-        let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            let deadlineString = components[3]
-            let deadline = dateFormatter.date(from: deadlineString)
-
-
-            let isDone = if components[4] == "true" {
-                true
-            } else {
-                false
-            }
-
-        var toDoItem = TodoItem(id: id, text: text, important: important, deadline: deadline, isDone: isDone)
-        toDoItem.creationDate = dateFormatter.date(from: components[5]) ?? Date()
-
-        return toDoItem
-    }
-
 }
 
