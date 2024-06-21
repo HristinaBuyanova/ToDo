@@ -3,12 +3,6 @@ import XCTest
 @testable import ToDo
 
 final class ToDoItemTests: XCTestCase {
-//
-//    var sut: TodoItem!
-//
-//    func testSut() {
-//        
-//    }
 
 func testTodoItemInitialization() {
         let id = "1"
@@ -40,13 +34,14 @@ func testTodoItemInitialization() {
 
 func testTodoItemJSONSerialization() {
         let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let id = "1"
         let text = "Купить хлеб"
-        let important = TodoItem.Importance.ordinary
-        let deadline = Date()
+        let important = TodoItem.Importance.unimportant
+        let deadline = Date(timeIntervalSince1970: 3)
         let isDone = false
-        let creationDate = Date()
-        let modifiedDate = Date()
+        let creationDate = Date(timeIntervalSince1970: 3)
+        let modifiedDate = Date(timeIntervalSince1970: 3)
 
     let todoItem = TodoItem(
         id: id,
@@ -78,10 +73,10 @@ func testTodoItemJSONParsing() {
         let id = "1"
         let text = "Купить хлеб"
         let important = TodoItem.Importance.ordinary
-        let deadline = Date()
+        let deadline = Date(timeIntervalSince1970: 3)
         let isDone = false
-        let creationDate = Date()
-        let modifiedDate = Date()
+        let creationDate = Date(timeIntervalSince1970: 3)
+        let modifiedDate = Date(timeIntervalSince1970: 3)
 
     let todoItem = TodoItem(
         id: id,

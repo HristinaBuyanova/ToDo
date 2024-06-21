@@ -1,8 +1,8 @@
 import Foundation
 
-class FileCache {
+final class FileCache {
 
-    private var toDoItems: [TodoItem] = []
+    private(set) var toDoItems: [TodoItem] = []
 
     func addToDoItems(_ item: TodoItem) {
         if !toDoItems.contains(where: { $0.id == item.id }) {
@@ -23,20 +23,23 @@ class FileCache {
             try todoListData.write(to: fileURL)
         }
 
-
     func loadTodoItemsFromFile() throws -> TodoItem? {
-        guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("todoList.json") else { throw FileCacheError.errorLoad }
+        guard let fileURL = FileManager.default.urls(
+            for: .documentDirectory,
+            in: .userDomainMask
+        ).first?.appendingPathComponent(
+            "todoList.json"
+        ) else {
+            throw FileCacheError.errorLoad
+        }
 
         let data = try Data(contentsOf: fileURL)
         let toDoItems = try JSONSerialization.jsonObject(with: data)
         return TodoItem.parse(json: toDoItems)
-//                let toDoItems = try JSONDecoder().decode([TodoItem].self, from: data)
-//        self.toDoItems = TodoItem.parse(json: toDoItems)
         }
 
     enum FileCacheError: Error {
         case errorSave
         case errorLoad
     }
-
 }

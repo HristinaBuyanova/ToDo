@@ -37,8 +37,7 @@ struct TodoItem: Equatable {
 extension TodoItem {
     var json: Any {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         var dict: [String: Any] = [
             "id": id,
             "text": text,
@@ -46,15 +45,15 @@ extension TodoItem {
             "creationDate": dateFormatter.string(from: creationDate)
         ]
 
-        if let deadline = self.deadline {
+        if let deadline = deadline {
             dict["deadline"] = dateFormatter.string(from: deadline)
-        } 
-
-        if important != .ordinary {
-            dict["important"] = self.important.rawValue
         }
 
-        if let modifiedDate = self.modifiedDate {
+        if important != .ordinary {
+            dict["important"] = important.rawValue
+        }
+
+        if let modifiedDate = modifiedDate {
             dict["modifiedDate"] = dateFormatter.string(from: modifiedDate)
         }
 
@@ -64,7 +63,7 @@ extension TodoItem {
     static func parse(json: Any) -> TodoItem? {
 
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
 
         guard let dict = json as? [String: Any] else { return nil }
 
@@ -72,15 +71,13 @@ extension TodoItem {
               let text = dict["text"] as? String,
               let isDone = dict["isDone"] as? Bool,
               let creationDateString = dict["creationDate"] as? String,
-              let creationDate = dateFormatter.date(from: creationDateString) else {
-            return nil
-        }
+              let creationDate = dateFormatter.date(from: creationDateString)
+        else { return nil }
 
         var deadline: Date?
         if let deadlineString = dict["deadline"] as? String {
             deadline = dateFormatter.date(from: deadlineString)
         }
-
 
         var important: Importance
         if let importantValue = dict["important"] as? String {
@@ -88,10 +85,11 @@ extension TodoItem {
         } else {
             important = Importance.ordinary
         }
-            var modifiedDate: Date?
-            if let modifiedDateString = dict["modifiedDate"] as? String {
-                modifiedDate = dateFormatter.date(from: modifiedDateString)
-            }
+
+        var modifiedDate: Date?
+        if let modifiedDateString = dict["modifiedDate"] as? String {
+            modifiedDate = dateFormatter.date(from: modifiedDateString)
+        }
 
         return TodoItem(
             id: id,
@@ -119,7 +117,7 @@ extension TodoItem {
             }
 
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
 
             let deadlineString = components[3]
             let deadline = dateFormatter.date(from: deadlineString)
