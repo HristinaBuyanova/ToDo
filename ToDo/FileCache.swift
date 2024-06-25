@@ -10,34 +10,66 @@ final class FileCache {
         }
     }
 
-    func deleteToDoItems(_ item: TodoItem) {
-        if let index = toDoItems.firstIndex(where: { $0 == item}) {
-            toDoItems.remove(at: index)
-        }
+    func deleteToDoItems(_ id: String) {
+        toDoItems.removeAll { $0.id == id }
     }
-
-    func saveTodoItemsToFile(item: TodoItem) throws {
-        guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("todoList.json") else { throw FileCacheError.errorSave }
-
-        let todoListData = try JSONSerialization.data(withJSONObject: item.json)
-            try todoListData.write(to: fileURL)
+    // MARK: func JSON
+    func saveJsonTodoItemsToFile(
+        fileName: String
+    ) throws {
+        let jsons = toDoItems.map {
+            $0.json
         }
-
-    func loadTodoItemsFromFile() throws -> TodoItem? {
         guard let fileURL = FileManager.default.urls(
             for: .documentDirectory,
             in: .userDomainMask
         ).first?.appendingPathComponent(
-            "todoList.json"
+            fileName
+        ) else {
+            throw FileCacheError.errorSave
+        }
+
+        let todoListData = try JSONSerialization.data(
+            withJSONObject: jsons
+        )
+        try todoListData.write(
+            to: fileURL
+        )
+    }
+
+    func loadJsonTodoItemsFromFile(fileName: String) throws {
+        guard let fileURL = FileManager.default.urls(
+            for: .documentDirectory,
+            in: .userDomainMask
+        ).first?.appendingPathComponent(
+            fileName
         ) else {
             throw FileCacheError.errorLoad
         }
 
         let data = try Data(contentsOf: fileURL)
-        let toDoItems = try JSONSerialization.jsonObject(with: data)
-        return TodoItem.parse(json: toDoItems)
+        if let items = try JSONSerialization.jsonObject(with: data) as? [Any] {
+            toDoItems = items.compactMap { TodoItem.parse(json: $0) }
+        }
+    }
+
+    // MARK: func CVS
+    func saveCvsTodoItemsToFile(fileName: String) throws {
+        let cvs = toDoItems.map { $0.csv }
+        guard let fileURL = FileManager.default.urls(
+            for: .documentDirectory,
+            in: .userDomainMask
+        ).first?.appendingPathComponent(
+            fileName
+        ) else {
+            throw FileCacheError.errorSave
         }
 
+        let todoListData = try JSONSerialization.data(withJSONObject: cvs)
+        try todoListData.write(to: fileURL)
+    }
+
+    // MARK: Error
     enum FileCacheError: Error {
         case errorSave
         case errorLoad
