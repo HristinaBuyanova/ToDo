@@ -33,7 +33,7 @@ struct TodoItem: Equatable {
         self.modifiedDate = modifiedDate
     }
 }
-
+// MARK: ToDoItem - JSON
 extension TodoItem {
     var json: Any {
         let dateFormatter = DateFormatter()
@@ -101,8 +101,22 @@ extension TodoItem {
             modifiedDate: modifiedDate
         )
     }
+    // MARK: ToDoItem - CVS
 
-        func loadCVS(from cvs: String) -> TodoItem? {
+    var csv: String {
+        var csvString: [String?] = [
+            id,
+            text,
+            important.rawValue,
+            deadline.map { ISO8601DateFormatter().string(from: $0) },
+            String(isDone),
+            ISO8601DateFormatter().string(from: creationDate),
+            modifiedDate.map { ISO8601DateFormatter().string(from: $0) }
+        ]
+        return csvString.map { $0 ?? "" }.joined(separator: ",")
+    }
+
+        static func parseCVS(from cvs: String) -> TodoItem? {
             let components = cvs.components(separatedBy: ",")
             guard components.count >= 4 else { return nil }
 
