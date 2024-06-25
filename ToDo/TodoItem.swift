@@ -104,7 +104,7 @@ extension TodoItem {
     // MARK: ToDoItem - CVS
 
     var csv: String {
-        var csvString: [String?] = [
+        let csvString: [String?] = [
             id,
             text,
             important.rawValue,
