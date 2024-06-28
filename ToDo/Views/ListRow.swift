@@ -7,6 +7,9 @@ struct ListRow: View {
     var body: some View {
         HStack(spacing: 10) {
             CircleImage()
+            if item.important == .important && !item.isDone {
+                ExclamationMarkImage()
+            }
             TextView()
             Spacer()
             ChevronImage()
@@ -15,28 +18,46 @@ struct ListRow: View {
 
     private func TextView() -> some View {
         VStack (alignment: .leading) {
-            Text(item.text)
-            if let deadline = item.deadline {
-                HStack {
-                    Image(systemName: "calendar")
-                    Text(deadline.string())
+            if item.isDone {
+                Text(item.text)
+                    .strikethrough()
+                    .font(.system(size: 17))
+                    .foregroundStyle(Color.labelTertiary)
+            } else {
+                Text(item.text)
+                    .font(.system(size: 17))
+                    .foregroundStyle(Color.labelPrimary)
+                if let deadline = item.deadline {
+                    HStack {
+                        Image(systemName: "calendar")
+                        Text(deadline.string())
+                    }
+                    .font(.system(size: 15))
+                    .foregroundStyle(Color.labelTertiary)
                 }
-                .foregroundStyle(.gray)
             }
-
         }
-        .font(.system(size: 17))
     }
 
     private func CircleImage() -> some View {
-        Image(systemName:
-                item.isDone ? "checkmark.circle.fill" :
-                "circle"
-        )
-        .resizable()
-        .foregroundStyle(item.isDone ? .green : .gray)
-        .frame(width: 24, height: 24)
-    }
+        if item.important != .important {
+            Image(systemName:
+                    item.isDone ? "checkmark.circle.fill" :
+                    "circle"
+            )
+            .resizable()
+            .foregroundStyle(item.isDone ? Color.green : Color.supportSeparator)
+            .frame(width: 24, height: 24)
+        } else {
+            Image(systemName:
+                    item.isDone ? "checkmark.circle.fill" :
+                    "circle"
+            )
+            .resizable()
+            .foregroundStyle(item.isDone ? Color.green : Color.red)
+            .frame(width: 24, height: 24)
+        }
+        }
 
     private func ChevronImage() -> some View {
         Image(systemName: "chevron.right")
@@ -45,17 +66,18 @@ struct ListRow: View {
             .frame(width: 7, height: 12)
             .bold()
     }
+
+    private func ExclamationMarkImage() -> some View {
+        Image(systemName: "exclamationmark.2")
+            .fontWeight(.bold)
+            .foregroundColor(.red)
+            .font(.system(size: 24))
+    }
 }
 
 #Preview {
-    ListRow(item: data[0])
+    ListRow(item: ViewModel().data[0])
         .padding()
 }
 
-let data = [TodoItem(text: "Купить хлеб", important: .important, deadline: Date())]
-func dateToString(date: Date) -> String {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "d MMMM"
-    dateFormatter.locale = Locale(identifier: "ru_RU")
-    return dateFormatter.string(from: date)
-}
+
