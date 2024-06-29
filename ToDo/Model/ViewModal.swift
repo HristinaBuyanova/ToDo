@@ -2,9 +2,9 @@
 
 import Foundation
 
-final class ViewModel {
+final class ViewModel: ObservableObject {
 
-    public var data = [TodoItem(text: "Купить хлеб", important: .important, deadline: Date(), isDone: true), TodoItem(text: "Купить хлеб", important: .ordinary, deadline: Date()), TodoItem(text: "Купить хлеб", important: .important, deadline: Date())]
+    public var data = [TodoItem(text: "Купить хлеб", important: .important, deadline: Date(), isDone: true), TodoItem(text: "Купить хлеб", important: .ordinary, deadline: Date()), TodoItem(text: "Купить хлеб", important: .important, deadline: Date()), TodoItem(text: "Купить хлеб", important: .important, deadline: Date(), isDone: false), TodoItem(text: "Купить хлеб", important: .important, deadline: Date(), isDone: false)]
 
     func addItem(item: TodoItem) {
         data.append(item)

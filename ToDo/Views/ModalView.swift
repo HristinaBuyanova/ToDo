@@ -3,38 +3,28 @@ import SwiftUI
 
 struct ModalView: View {
     var toDo: TodoItem
-    @State private var selectItem: TodoItem
+    @State var selectItem: TodoItem
     @Environment(\.dismiss) var dismiss
     @State var importance: TodoItem.Importance = .ordinary
-    @State var isExpires: Bool = false
+    @State var isDeadline: Bool = false
     @State var selectedDate: Date = Date().addingTimeInterval(24*3600)
     @State var isShowDatePicker: Bool = false
     @State var text: String = ""
-
-    init(toDo: TodoItem) {
-        self.toDo = toDo
-        self._selectItem = State(initialValue: toDo)
-    }
 
     var body: some View {
         NavigationStack {
             Form {
                 Section {
-                    
                     TextField("Что надо сделать?", text: $text, axis: .vertical)
                         .lineLimit(3...)
                 }
-
                 Section {
                     VStack {
-                        importanceSection
-//                            .animation(nil)
+                        ImportanceSection()
                         Divider()
-//                            .animation(nil)
-                        expiresSection
+                        ExpiresSection()
                     }
                 }
-
                 Section {
                     HStack {
                         Spacer()
@@ -58,24 +48,22 @@ struct ModalView: View {
                         dismiss()
                     }
                 }
-
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Сохранить") {
 
                     }
                 }
             }
-            .onChange(of: isExpires) { value in
+            .onChange(of: isDeadline) { value in
                 withAnimation(.easeInOut(duration: 1)) {
                     isShowDatePicker = value
-
                 }
             }
         }
         .animation(.easeInOut)
     }
 
-    var importanceSection: some View {
+    private func ImportanceSection() -> some View {
         HStack {
             Text("Важность")
             Spacer()
@@ -84,20 +72,19 @@ struct ModalView: View {
         }
     }
 
-    var expiresSection: some View {
+    private func ExpiresSection() -> some View {
         VStack {
             HStack {
                 VStack(alignment: .leading) {
                     Text("Сделать до")
-                    if isExpires {
-                        showDatePickerButton
+                    if isDeadline {
+                        ShowDatePickerButton()
                     }
                 }
                 Spacer()
-                Toggle("", isOn: $isExpires)
+                Toggle("", isOn: $isDeadline)
             }
             .animation(nil)
-
             if isShowDatePicker {
                 Divider()
                 DatePicker("", selection: $selectedDate, displayedComponents: .date)
@@ -105,14 +92,13 @@ struct ModalView: View {
                     .environment(\.locale, Locale.init(identifier: Locale.preferredLanguages.first ?? "en-US"))
                     .transition(
                         .slide
-                        //                        .opacity.combined(with: .move(edge: .top))
                     )
                     .animation(.easeInOut)
             }
         }
     }
 
-    var showDatePickerButton: some View {
+    private func ShowDatePickerButton() -> some View {
         Button(
             action: {
                 withAnimation(.easeInOut(duration: 0.5)) {
@@ -126,22 +112,6 @@ struct ModalView: View {
                     .fontWeight(.bold)
             }
         )
-    }
-}
-
-struct ImportancePicker: View {
-    @Binding var importance: TodoItem.Importance
-
-    var body: some View {
-        Picker("", selection: $importance) {
-            Image(systemName: "arrow.down")
-                .tag(TodoItem.Importance.unimportant)
-            Text("нет")
-                .tag(TodoItem.Importance.ordinary)
-            Text("‼")
-                .tag(TodoItem.Importance.important)
-        }
-        .pickerStyle(.segmented)
     }
 }
 

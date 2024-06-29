@@ -20,6 +20,7 @@ struct ListRow: View {
         VStack (alignment: .leading) {
             if item.isDone {
                 Text(item.text)
+                    .lineLimit(3)
                     .strikethrough()
                     .font(.system(size: 17))
                     .foregroundStyle(Color.labelTertiary)

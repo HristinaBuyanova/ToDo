@@ -32,13 +32,8 @@ struct MainView: View {
                 }
                 .shadow(color: .black.opacity(0.4), radius: 4, x: 0, y: 8)
             }
-
-
-            //        .backgroundStyle(Color.backPrimary)
         }
-
     }
-
 
     private func ListItem() -> some View {
         List {
@@ -47,11 +42,32 @@ struct MainView: View {
                     in ListRow(item: element).tag(element)
                         .onTapGesture {
                             selectedItem = element
+                            selectedIndex = index
                             showModal = true
                         }
-
                 }
                 .listRowBackground(Color.backSecondary)
+                .swipeActions(edge: .leading) {
+                    Button {
+//                        доделать
+                    } label: {
+                        Image(systemName: "checkmark.circle")
+                    }
+                    .tint(.green)
+                }
+                .swipeActions(edge: .trailing) {
+                                        Button(role: .destructive) {
+                                            ViewModel().data.remove(at: selectedIndex)
+                                        } label: {
+                                            Image(systemName: "trash")
+                                        }
+                                        Button {
+                                            showModal = true
+                                        } label: {
+                                            Image(systemName: "info.circle")
+                                        }
+                                        .tint(Color("ColorGrayLight"))
+                                    }
 
             } header: {
                 HStack {
@@ -80,18 +96,18 @@ struct MainView: View {
             Text("Мои дела")
                 .foregroundStyle(Color.labelPrimary))
         .font(.system(size: 38))
-        .sheet(item: $selectedItem) { item in
-            NavigationStack {
-                ModalView(toDo: item)
-                    .navigationTitle("Дело")
-                    .navigationBarTitleDisplayMode(.inline)
-            }
+        .background(Color("BackSecondary"))
+        .sheet(isPresented: $showModal) {
+            ModalView(
+                toDo: selectedItem ?? TodoItem(text: "", important: .ordinary), selectItem: selectedItem ?? TodoItem(text: "", important: .ordinary),
+                importance: selectedItem?.important ?? .ordinary,
+                isDeadline: selectedItem?.deadline != nil ? true : false,
+                isShowDatePicker: false,
+                text: selectedItem?.text ?? ""
+            )
         }
     }
 }
-
-
-
 
 #Preview {
     MainView()
