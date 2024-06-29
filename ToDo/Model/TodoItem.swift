@@ -1,11 +1,11 @@
 import Foundation
 
-struct TodoItem: Equatable {
+struct TodoItem: Identifiable, Hashable {
     let id: String
     let text: String
     let important: Importance
     let deadline: Date?
-    let isDone: Bool
+    var isDone: Bool /// mutating func
     let creationDate: Date
     let modifiedDate: Date?
 
