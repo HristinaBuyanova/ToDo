@@ -2,7 +2,7 @@
 import SwiftUI
 
 struct ListRow: View {
-    var item: TodoItem
+    @Binding var item: TodoItem
 
     var body: some View {
         HStack(spacing: 10) {
@@ -76,9 +76,9 @@ struct ListRow: View {
     }
 }
 
-#Preview {
-    ListRow(item: ViewModel().data[0])
-        .padding()
-}
+//#Preview {
+//    ListRow(item: TodoItem(text: "ghbdtn", important: .ordinary))
+//        .padding()
+//}
 
 

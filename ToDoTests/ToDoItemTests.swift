@@ -7,7 +7,7 @@ final class ToDoItemTests: XCTestCase {
 func testTodoItemInitialization() {
         let id = "1"
         let text = "Купить хлеб"
-        let important = TodoItem.Importance.ordinary
+        let important = Importance.ordinary
         let deadline = Date()
         let isDone = false
         let creationDate = Date()
@@ -37,7 +37,7 @@ func testTodoItemJSONSerialization() {
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let id = "1"
         let text = "Купить хлеб"
-        let important = TodoItem.Importance.unimportant
+        let important = Importance.unimportant
         let deadline = Date(timeIntervalSince1970: 3)
         let isDone = false
         let creationDate = Date(timeIntervalSince1970: 3)
@@ -72,7 +72,7 @@ func testTodoItemJSONSerialization() {
 func testTodoItemJSONParsing() {
         let id = "1"
         let text = "Купить хлеб"
-        let important = TodoItem.Importance.ordinary
+        let important = Importance.ordinary
         let deadline = Date(timeIntervalSince1970: 3)
         let isDone = false
         let creationDate = Date(timeIntervalSince1970: 3)

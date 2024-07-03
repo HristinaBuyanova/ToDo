@@ -8,6 +8,12 @@ struct MainView: View {
     @State private var showModal = false
     @State private var selectedIndex: Int = 0
     @State private var selectedItem: TodoItem?
+
+    @State private var newToDoItemText: String = ""
+    @State private var editingToDoItem: TodoItem?
+
+    @State private var isDetailPresented: Bool = false
+    @State private var isDetailViewPresenting: Bool = false
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
