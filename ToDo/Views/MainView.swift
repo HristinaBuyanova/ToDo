@@ -2,119 +2,266 @@
 import SwiftUI
 
 struct MainView: View {
-    @State private var show = "Показать"
-    @State private var item = ViewModel().filterDataNotDone()
-    @Environment(\.dismiss) var dismiss
-    @State private var showModal = false
-    @State private var selectedIndex: Int = 0
-    @State private var selectedItem: TodoItem?
+
+    @ObservedObject var toDoItemsStore: ToDoItemsStore
 
     @State private var newToDoItemText: String = ""
     @State private var editingToDoItem: TodoItem?
 
     @State private var isDetailPresented: Bool = false
     @State private var isDetailViewPresenting: Bool = false
+
+
     var body: some View {
-        NavigationStack {
-            ZStack(alignment: .bottom) {
-                ListItem()
-                Button {
-                    let newItem = TodoItem(text: "", important: .ordinary)
-                    ViewModel().addItem(item: newItem)
-                    selectedItem = newItem
-                    ViewModel().addItem(item: newItem)
-                    showModal = true
-                } label: {
-                    ZStack {
-                        Circle()
-                            .foregroundStyle(Color("Blue"))
-                            .frame(width: 44, height: 44)
-                        Image(systemName: "plus")
-                            .resizable()
-                            .foregroundStyle(Color.white)
-                            .frame(width: 22, height: 22)
-                            .bold()
-                    }
-                }
-                .shadow(color: .black.opacity(0.4), radius: 4, x: 0, y: 8)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            NavigationSplitView {
+                listSection
+                    .navigationTitle("Мои Дела")
+            } detail: {
+                detailView
             }
-        }
-    }
-
-    private func ListItem() -> some View {
-        List {
-            Section {
-                ForEach(Array(item.enumerated()), id: \.offset) { index, element
-                    in ListRow(item: element).tag(element)
-                        .onTapGesture {
-                            selectedItem = element
-                            selectedIndex = index
-                            showModal = true
-                        }
-                }
-                .listRowBackground(Color.backSecondary)
-                .swipeActions(edge: .leading) {
-                    Button {
-//                        доделать
-                    } label: {
-                        Image(systemName: "checkmark.circle")
-                    }
-                    .tint(.green)
-                }
-                .swipeActions(edge: .trailing) {
-                                        Button(role: .destructive) {
-                                            ViewModel().data.remove(at: selectedIndex)
-                                        } label: {
-                                            Image(systemName: "trash")
-                                        }
-                                        Button {
-                                            showModal = true
-                                        } label: {
-                                            Image(systemName: "info.circle")
-                                        }
-                                        .tint(Color("ColorGrayLight"))
-                                    }
-
-            } header: {
-                HStack {
-                    Text("Выполнено - \(ViewModel().filterDataIsDone().count)")
-                        .foregroundStyle(Color.labelTertiary)
-                        .font(.system(size: 15))
-                    Spacer()
-                    Button(action: {
-                        if isShow {
-                            self.show = "показать"
-                            item = ViewModel().filterDataNotDone()
-                        } else {
-                            self.show = "скрыть"
-                            item = ViewModel().data
-                        }
-                        isShow.toggle()
-                    }, label: {
-                        Text(self.show)
-                            .foregroundStyle(Color.blue)
-                            .font(.system(size: 15))
-                    })
-                }
+        } else {
+            NavigationStack {
+                listSection
             }
-
-        } .navigationTitle(
-            Text("Мои дела")
-                .foregroundStyle(Color.labelPrimary))
-        .font(.system(size: 38))
-        .background(Color("BackSecondary"))
-        .sheet(isPresented: $showModal) {
-            ModalView(
-                toDo: selectedItem ?? TodoItem(text: "", important: .ordinary), selectItem: selectedItem ?? TodoItem(text: "", important: .ordinary),
-                importance: selectedItem?.important ?? .ordinary,
-                isDeadline: selectedItem?.deadline != nil ? true : false,
-                isShowDatePicker: false,
-                text: selectedItem?.text ?? ""
+            .sheet(
+                isPresented: $isDetailPresented,
+                content: {
+                    detailView
+                }
             )
         }
     }
+
+    private var listSection: some View {
+        List {
+            Section(
+                header: HStack {
+                    Text("Выполнено – \(toDoItemsStore.completedCount)")
+                        .contentTransition(.numericText())
+                    Spacer()
+                    settingsMenu
+                }
+            ) {
+                ForEach($toDoItemsStore.currentToDoItems) { toDoItem in
+                    listRow(for: toDoItem)
+                }
+
+                TextField("Новое", text: $newToDoItemText)
+                    .onSubmit {
+                        let plainText = newToDoItemText.trimmingCharacters(in: .whitespacesAndNewlines)
+
+                        if !plainText.isEmpty {
+                            let toDoItem = TodoItem(text: newToDoItemText)
+                            toDoItemsStore.add(toDoItem)
+                        }
+
+                        newToDoItemText = ""
+                    }
+                    .submitLabel(.done)
+                    .padding(.leading, 40)
+            }
+        }
+        .navigationTitle("Мои дела")
+        .background(AppColors.backPrimary)
+        .scrollContentBackground(.hidden)
+        .environment(\.defaultMinListRowHeight, 56)
+        .overlay(addNewItemButton, alignment: .bottom)
+        .animation(.default, value: toDoItemsStore.currentToDoItems)
+        .toolbar {
+            settingsMenu
+        }
+    }
+
+    private var settingsMenu: some View {
+        Menu("Настройки", systemImage: "line.3.horizontal.decrease.circle") {
+            Button {
+                withAnimation {
+                    toDoItemsStore.areCompletedShown.toggle()
+                }
+            } label: {
+                Label(
+                    "\(toDoItemsStore.areCompletedShown ? "Скрыть" : "Показать") выполненные",
+                    systemImage: toDoItemsStore.areCompletedShown ? "eye.slash" : "eye"
+                )
+            }
+
+            Divider()
+
+            Menu("Сортировать", systemImage: "arrow.up.arrow.down") {
+                Picker("Опции", selection: $toDoItemsStore.sortingOption) {
+                    ForEach(ToDoItemsStore.SortingOption.allCases) { option in
+                        Text(option.rawValue)
+                            .tag(option)
+                    }
+
+                }
+
+                Divider()
+
+                Picker("Порядок", selection: $toDoItemsStore.sortingOrder) {
+                    ForEach(ToDoItemsStore.SortingOrder.allCases) { order in
+                        Text(order.rawValue)
+                            .tag(order)
+                    }
+                }
+            }
+        }
+    }
+
+    private var addNewItemButton: some View {
+        Button {
+            isDetailViewPresenting = true
+            editingToDoItem = nil
+            isDetailPresented = true
+        } label: {
+            Image(systemName: "plus.circle.fill")
+                .resizable()
+                .foregroundStyle(.white, .blue)
+                .frame(width: 44, height: 44)
+                .shadow(radius: 8, y: 4)
+        }
+        .padding(.bottom, 20)
+    }
+
+    private var detailView: some View {
+        Group {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                if isDetailViewPresenting {
+                    ToDoItemDetail(
+                        editingToDoItem: $editingToDoItem,
+                        onComplete: { toDoItem in onSave(toDoItem) },
+                        onDismiss: { onDismiss() },
+                        onDelete: { onDelete() }
+                    )
+                } else {
+                    ContentUnavailableView("Выберите задачу", systemImage: "filemenu.and.selection")
+                }
+            } else {
+                ToDoItemDetail(
+                    editingToDoItem: $editingToDoItem,
+                    onComplete: { toDoItem in onSave(toDoItem) },
+                    onDismiss: { onDismiss() },
+                    onDelete: { onDelete() }
+                )
+            }
+        }
+    }
+
+    private func listRow(for toDoItem: Binding<TodoItem>) -> some View {
+        ListRow(toDoItem: toDoItem,
+                onComplete: { toDoItemsStore.addOrUpdate(toDoItem.wrappedValue) })
+        .onTapGesture {
+            presentDetailView(for: toDoItem.wrappedValue)
+        }
+        .swipeActions(edge: .leading) {
+            completeAction(for: toDoItem.wrappedValue)
+        }
+        .swipeActions(edge: .trailing) {
+            deleteAction(for: toDoItem.wrappedValue)
+            infoAction(for: toDoItem.wrappedValue)
+        }
+    }
+
+    private func completeAction(for toDoItem: TodoItem) -> some View {
+        Button {
+            toDoItemsStore.addOrUpdate(
+                TodoItem(
+                    id: toDoItem.id,
+                    text: toDoItem.text,
+                    important: toDoItem.important,
+                    deadline: toDoItem.deadline,
+                    isDone: !toDoItem.isDone,
+                    creationDate: toDoItem.creationDate,
+                    modifiedDate: toDoItem.modifiedDate
+                )
+            )
+        } label: {
+            Image(systemName: toDoItem.isDone ? "circle" : "checkmark.circle.fill")
+        }
+        .tint(.green)
+    }
+
+    private func deleteAction(for toDoItem: TodoItem) -> some View {
+        Button(role: .destructive) {
+            editingToDoItem = toDoItem
+            onDelete()
+        } label: {
+            Image(systemName: "trash.fill")
+        }
+    }
+
+    private func infoAction(for toDoItem: TodoItem) -> some View {
+        Button {
+            presentDetailView(for: toDoItem)
+        } label: {
+            Image(systemName: "info.circle.fill")
+        }
+    }
+
+    private func presentDetailView(for toDoItem: TodoItem) {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            isDetailViewPresenting = true
+            editingToDoItem = toDoItem
+        } else {
+            isDetailPresented = true
+            editingToDoItem = toDoItem
+        }
+    }
+
+    private func discardDetailView() {
+        isDetailViewPresenting = false
+        editingToDoItem = nil
+        isDetailPresented = false
+    }
+
+    private func onSave(_ toDoItem: TodoItem) {
+        withAnimation {
+            toDoItemsStore.addOrUpdate(toDoItem)
+        }
+
+        discardDetailView()
+    }
+
+    private func onDismiss() {
+        discardDetailView()
+    }
+
+    private func onDelete() {
+        withAnimation {
+            if let editingToDoItem = editingToDoItem {
+                toDoItemsStore.delete(editingToDoItem)
+            }
+        }
+
+        discardDetailView()
+    }
 }
 
-#Preview {
-    MainView()
+struct ListHeader: View {
+    @Binding var toDoItems: [TodoItem]
+    @Binding var isExpanded: Bool
+
+    var completedCount: Int {
+        toDoItems
+            .filter { $0.isDone }
+            .count
+    }
+
+    var body: some View {
+        HStack {
+            Text("Выполнено – \(completedCount)")
+                .textCase(.none)
+                .contentTransition(.numericText(value: Double(completedCount)))
+        }
+    }
 }
+
+struct ToDoItemsList_Previews: PreviewProvider {
+    static var previews: some View {
+        let toDoItemsStore = ToDoItemsStore()
+
+        return MainView(toDoItemsStore: toDoItemsStore)
+    }
+}
+

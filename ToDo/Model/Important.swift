@@ -1,7 +1,14 @@
 
 import Foundation
+import SwiftUI
 
-enum Importance: String, CaseIterable, Comparable {
+enum Importance: String, CaseIterable {
+    case unimportant
+    case ordinary
+    case important 
+}
+
+extension Importance: Comparable {
     static func < (lhs: Importance, rhs: Importance) -> Bool {
         switch (lhs, rhs) {
         case (.unimportant, _) where rhs != .unimportant:
@@ -12,8 +19,7 @@ enum Importance: String, CaseIterable, Comparable {
             return false
         }
     }
-    case unimportant = "неважная"
-    case ordinary = "обычная"
-    case important = "важная"
 }
+
+
 

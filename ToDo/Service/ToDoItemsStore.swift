@@ -6,7 +6,6 @@ class ToDoItemsStore: ObservableObject {
         var id: String {
             rawValue
         }
-
         case dateAdded = "По дате добавления"
         case importance = "По важности"
     }

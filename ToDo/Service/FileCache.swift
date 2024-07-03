@@ -1,23 +1,23 @@
 import Foundation
 
-final class FileCache {
+struct FileCache {
 
     private(set) var toDoItems: [TodoItem] = []
 
-    static var data = [TodoItem(text: "Купить хлеб", important: .important, deadline: Date(), isDone: true), TodoItem(text: "Купить хлеб", important: .ordinary, deadline: Date()), TodoItem(text: "Купить хлеб", important: .important, deadline: Date()), TodoItem(text: "Купить хлеб", important: .important, deadline: Date(), isDone: false), TodoItem(text: "Купить хлеб", important: .important, deadline: Date(), isDone: false)]
+    static let data = [TodoItem(text: "Купить хлеб", important: .important, deadline: Date(), isDone: true), TodoItem(text: "Купить хлеб", important: .ordinary, deadline: Date()), TodoItem(text: "Купить хлеб", important: .important, deadline: Date()), TodoItem(text: "Купить хлеб", important: .important, deadline: Date(), isDone: false), TodoItem(text: "Купить хлеб", important: .important, deadline: Date(), isDone: false)]
 
     private var documentsDirectory: URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
     }
 
-    func addToDoItems(_ item: TodoItem) {
+    mutating func addToDoItems(_ item: TodoItem) {
         if !toDoItems.contains(where: { $0.id == item.id }) {
             toDoItems.append(item)
         }
     }
 
-    func addOrUpdate(_ item: TodoItem) {
+    mutating func addOrUpdate(_ item: TodoItem) {
         if let index = toDoItems.firstIndex(where: { item.id == $0.id }) {
             toDoItems[index] = item
         } else {
@@ -26,7 +26,7 @@ final class FileCache {
     }
 
     @discardableResult
-    func delete(_ id: String) -> TodoItem? {
+    mutating func delete(_ id: String) -> TodoItem? {
         guard let index = toDoItems.firstIndex(where: { id == $0.id }) else { return nil }
         return toDoItems.remove(at: index)
     }
@@ -48,7 +48,7 @@ final class FileCache {
         }
     }
 
-    func load(from file: String, format: FileFormat = .json) throws {
+    mutating func load(from file: String, format: FileFormat = .json) throws {
         let path = documentsDirectory
             .appending(path: file)
             .appendingPathExtension(format.rawValue)
