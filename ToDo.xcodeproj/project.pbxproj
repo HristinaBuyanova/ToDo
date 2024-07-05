@@ -19,6 +19,7 @@
 		6E796EED2C38B21500CB9323 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EEC2C38B21500CB9323 /* CategoryView.swift */; };
 		6E796EEF2C38B29000CB9323 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EEE2C38B29000CB9323 /* CategoryViewController.swift */; };
 		6E796EF12C38B30F00CB9323 /* CategoryUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EF02C38B30F00CB9323 /* CategoryUIView.swift */; };
+		6E796EF32C38B41C00CB9323 /* CalendarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EF22C38B41C00CB9323 /* CalendarTableViewCell.swift */; };
 		6EAE57342C3451E300B56E02 /* ToDoItem+EXT+Json.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAE57332C3451E300B56E02 /* ToDoItem+EXT+Json.swift */; };
 		6EAE57362C3454A700B56E02 /* TodoItem+EXT+CVS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAE57352C3454A700B56E02 /* TodoItem+EXT+CVS.swift */; };
 		6EAE57392C34627F00B56E02 /* ToDoItemsSorter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAE57382C34627F00B56E02 /* ToDoItemsSorter.swift */; };
@@ -62,6 +63,7 @@
 		6E796EEC2C38B21500CB9323 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		6E796EEE2C38B29000CB9323 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		6E796EF02C38B30F00CB9323 /* CategoryUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryUIView.swift; sourceTree = "<group>"; };
+		6E796EF22C38B41C00CB9323 /* CalendarTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTableViewCell.swift; sourceTree = "<group>"; };
 		6EAE57332C3451E300B56E02 /* ToDoItem+EXT+Json.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+EXT+Json.swift"; sourceTree = "<group>"; };
 		6EAE57352C3454A700B56E02 /* TodoItem+EXT+CVS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TodoItem+EXT+CVS.swift"; sourceTree = "<group>"; };
 		6EAE57382C34627F00B56E02 /* ToDoItemsSorter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemsSorter.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 			children = (
 				6E796EEB2C38B1F400CB9323 /* Category */,
 				6E796EE72C38AEB500CB9323 /* CalendarView.swift */,
+				6E796EF22C38B41C00CB9323 /* CalendarTableViewCell.swift */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -346,6 +349,7 @@
 				6EB8962D2C2AEF3E00ACE282 /* MainView.swift in Sources */,
 				6ED3A5F52C20372D000C3632 /* ToDoApp.swift in Sources */,
 				6EB896532C2EF03500ACE282 /* ViewModal.swift in Sources */,
+				6E796EF32C38B41C00CB9323 /* CalendarTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
