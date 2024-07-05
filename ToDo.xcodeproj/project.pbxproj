@@ -14,6 +14,8 @@
 		6E796EE02C388D6500CB9323 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EDF2C388D6500CB9323 /* Category.swift */; };
 		6E796EE22C388D9E00CB9323 /* CategoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EE12C388D9E00CB9323 /* CategoryCache.swift */; };
 		6E796EE42C38982C00CB9323 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EE32C38982B00CB9323 /* ListViewModel.swift */; };
+		6E796EE82C38AEB500CB9323 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EE72C38AEB500CB9323 /* CalendarView.swift */; };
+		6E796EEA2C38B07600CB9323 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EE92C38B07600CB9323 /* ViewModifiers.swift */; };
 		6EAE57342C3451E300B56E02 /* ToDoItem+EXT+Json.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAE57332C3451E300B56E02 /* ToDoItem+EXT+Json.swift */; };
 		6EAE57362C3454A700B56E02 /* TodoItem+EXT+CVS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAE57352C3454A700B56E02 /* TodoItem+EXT+CVS.swift */; };
 		6EAE57392C34627F00B56E02 /* ToDoItemsSorter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAE57382C34627F00B56E02 /* ToDoItemsSorter.swift */; };
@@ -52,6 +54,8 @@
 		6E796EDF2C388D6500CB9323 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		6E796EE12C388D9E00CB9323 /* CategoryCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCache.swift; sourceTree = "<group>"; };
 		6E796EE32C38982B00CB9323 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
+		6E796EE72C38AEB500CB9323 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		6E796EE92C38B07600CB9323 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		6EAE57332C3451E300B56E02 /* ToDoItem+EXT+Json.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+EXT+Json.swift"; sourceTree = "<group>"; };
 		6EAE57352C3454A700B56E02 /* TodoItem+EXT+CVS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TodoItem+EXT+CVS.swift"; sourceTree = "<group>"; };
 		6EAE57382C34627F00B56E02 /* ToDoItemsSorter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemsSorter.swift; sourceTree = "<group>"; };
@@ -92,6 +96,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6E796EE62C38AE9A00CB9323 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				6E796EE72C38AEB500CB9323 /* CalendarView.swift */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
 		6EAE57372C3455C500B56E02 /* Service */ = {
 			isa = PBXGroup;
 			children = (
@@ -105,6 +117,7 @@
 		6EB8962B2C2AEF1200ACE282 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6E796EE62C38AE9A00CB9323 /* UIKit */,
 				6EB8962C2C2AEF3E00ACE282 /* MainView.swift */,
 				6EB8962E2C2B07E900ACE282 /* ListRow.swift */,
 				6EB896542C2F669400ACE282 /* ModalView.swift */,
@@ -122,6 +135,7 @@
 				6EAE57352C3454A700B56E02 /* TodoItem+EXT+CVS.swift */,
 				6E3B88342C35543300226077 /* Color.swift */,
 				6E6169382C35B57700968138 /* Image.swift */,
+				6E796EE92C38B07600CB9323 /* ViewModifiers.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -295,6 +309,7 @@
 				6E6169392C35B57700968138 /* Image.swift in Sources */,
 				6E796EE02C388D6500CB9323 /* Category.swift in Sources */,
 				6E3B88332C35474600226077 /* Important.swift in Sources */,
+				6E796EE82C38AEB500CB9323 /* CalendarView.swift in Sources */,
 				6EAE57362C3454A700B56E02 /* TodoItem+EXT+CVS.swift in Sources */,
 				6EAE57392C34627F00B56E02 /* ToDoItemsSorter.swift in Sources */,
 				6EB896352C2CB2C700ACE282 /* Title.swift in Sources */,
@@ -302,6 +317,7 @@
 				6ED3A5F72C20372D000C3632 /* ContentView.swift in Sources */,
 				6ED3A6032C2040A6000C3632 /* TodoItem.swift in Sources */,
 				6EAE57342C3451E300B56E02 /* ToDoItem+EXT+Json.swift in Sources */,
+				6E796EEA2C38B07600CB9323 /* ViewModifiers.swift in Sources */,
 				6EB8962F2C2B07E900ACE282 /* ListRow.swift in Sources */,
 				6EB896552C2F669400ACE282 /* ModalView.swift in Sources */,
 				6EB896322C2C36C000ACE282 /* DateEXT.swift in Sources */,
