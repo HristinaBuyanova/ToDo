@@ -3,7 +3,7 @@ import SwiftUI
 
 struct MainView: View {
 
-    @ObservedObject var toDoItemsStore: ToDoItemsStore
+    @ObservedObject var toDoItemsStore: ToDoItemsSorter
 
     @State private var newToDoItemText: String = ""
     @State private var editingToDoItem: TodoItem?
@@ -90,7 +90,7 @@ struct MainView: View {
 
             Menu("Сортировать", systemImage: "arrow.up.arrow.down") {
                 Picker("Опции", selection: $toDoItemsStore.sortingOption) {
-                    ForEach(ToDoItemsStore.SortingOption.allCases) { option in
+                    ForEach(ToDoItemsSorter.SortingOption.allCases) { option in
                         Text(option.rawValue)
                             .tag(option)
                     }
@@ -100,7 +100,7 @@ struct MainView: View {
                 Divider()
 
                 Picker("Порядок", selection: $toDoItemsStore.sortingOrder) {
-                    ForEach(ToDoItemsStore.SortingOrder.allCases) { order in
+                    ForEach(ToDoItemsSorter.SortingOrder.allCases) { order in
                         Text(order.rawValue)
                             .tag(order)
                     }
@@ -259,7 +259,7 @@ struct ListHeader: View {
 
 struct ToDoItemsList_Previews: PreviewProvider {
     static var previews: some View {
-        let toDoItemsStore = ToDoItemsStore()
+        let toDoItemsStore = ToDoItemsSorter()
 
         return MainView(toDoItemsStore: toDoItemsStore)
     }

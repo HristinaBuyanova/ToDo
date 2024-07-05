@@ -1,7 +1,7 @@
 
 import Foundation
 
-class ToDoItemsStore: ObservableObject {
+class ToDoItemsSorter: ObservableObject {
     enum SortingOption: String, Identifiable, CaseIterable {
         var id: String {
             rawValue
@@ -56,7 +56,7 @@ class ToDoItemsStore: ObservableObject {
             try fileCache.load(from: "toDoItems")
             toDoItems = fileCache.toDoItems
         } catch {
-            print("ToDoItemsStore: Failure while loading toDoItems from the file. It is normal if it is the first launch.")
+            print("Failure while loading toDoItems from the file. It is normal if it is the first launch.")
         }
 
         updateCurrentToDoItems()
@@ -102,7 +102,7 @@ class ToDoItemsStore: ObservableObject {
         do {
             try fileCache.save(to: "toDoItems")
         } catch {
-            print("ToDoItemsStore: Error saving toDoItems to the file.")
+            print("Error saving toDoItems to the file.")
         }
     }
 

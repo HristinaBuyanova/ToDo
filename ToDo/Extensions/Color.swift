@@ -1,19 +1,9 @@
-//
-//  Color.swift
-//  ToDo
-//
-//  Created by Христина Буянова on 03.07.2024.
-//
 
 import Foundation
 import SwiftUI
 
 extension Color {
-    /// Initializes a color from a hexadecimal string.
-    /// - Parameter hex: A hexadecimal color string. Supports the following formats:
-    ///   - RGB (12-bit): `#RGB`
-    ///   - RGB (24-bit): `#RRGGBB`
-    ///   - ARGB (32-bit): `#AARRGGBB`
+
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         let a, r, g, b: UInt64
@@ -41,7 +31,7 @@ extension Color {
         )
     }
 
-    /// A hexadecimal color string representation of the color.
+
     var hex: String {
         let components = UIColor(self).cgColor.components
         let r: CGFloat = components?[0] ?? 0.0
@@ -60,29 +50,22 @@ extension Color {
 }
 
 extension Color {
-    /// Calculates the luminance of the color.
-    /// - Returns: The luminance value of the color as a `CGFloat`.
-    ///   Uses the relative luminance formula: 0.2126 * red + 0.7152 * green + 0.0722 * blue.
+
     func luminance() -> CGFloat {
         let components = UIColor(self).cgColor.components ?? [0, 0, 0, 0]
         let r = components[0]
         let g = components[1]
         let b = components[2]
 
-        // Use the relative luminance formula.
         let luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b
 
         return luminance
     }
 
-    /// A Boolean value indicating whether the color is dark.
-    /// - Returns: `true` if the luminance of the color is less than 0.5; otherwise, `false`.
     var isDark: Bool {
         return luminance() < 0.5
     }
 
-    /// The ideal text color (black or white) based on the luminance of the color.
-    /// - Returns: `.white` if the color is dark; otherwise, `.black`.
     var idealTextColor: Color {
         return isDark ? .white : .black
     }
@@ -210,10 +193,7 @@ struct AppColors {
 }
 
 extension Color {
-    /// Initializes a color that adapts to the current interface style (light or dark mode).
-    /// - Parameters:
-    ///   - lightModeColor: The color to use in light mode.
-    ///   - darkModeColor: The color to use in dark mode.
+
     init(
         light lightModeColor: @escaping @autoclosure () -> Color,
         dark darkModeColor: @escaping @autoclosure () -> Color
@@ -226,10 +206,7 @@ extension Color {
 }
 
 extension UIColor {
-    /// Initializes a color that adapts to the current interface style (light or dark mode).
-    /// - Parameters:
-    ///   - lightModeColor: The color to use in light mode.
-    ///   - darkModeColor: The color to use in dark mode.
+
     convenience init(
         light lightModeColor: @escaping @autoclosure () -> UIColor,
         dark darkModeColor: @escaping @autoclosure () -> UIColor
