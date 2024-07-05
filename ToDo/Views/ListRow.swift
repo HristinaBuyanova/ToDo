@@ -57,6 +57,9 @@ struct ListRow: View {
                     .frame(width: 5)
                     .padding(.vertical, 8)
             }
+
+            Spacer()
+            Image(systemName: "chevron.right")
         }
     }
 }
