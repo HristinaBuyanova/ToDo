@@ -2,284 +2,169 @@
 import SwiftUI
 
 struct ToDoItemDetail: View {
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
 
-    @Binding var editingToDoItem: TodoItem?
 
-    let onComplete: (TodoItem) -> Void
-    let onDismiss: () -> Void
-    let onDelete: () -> Void
-
-    @State private var text: String = ""
-    @State private var important: Importance = .ordinary
-
-    @State private var color: Color = .red
-    @State private var isColorToggled = false
-    @State private var isColorPickerPresented: Bool = false
-
-    @State private var deadline = Date(timeIntervalSinceNow: 86400)
-    @State private var isDueDateToggled = false
-    @State private var isDatePickerShown = false
-
-    @State private var isEditing = false
+    @StateObject var viewModel: ViewModel
+    @FocusState private var isFocused
+    @Environment(\.dismiss) var dismiss
 
     var body: some View {
         NavigationStack {
-            contentView
-                .navigationTitle("Дело")
-                .navigationBarTitleDisplayMode(.inline)
-                .background(AppColors.backPrimary)
-                .scrollContentBackground(.hidden)
-                .environment(\.defaultMinListRowHeight, 56)
-                .toolbarBackground(horizontalSizeClass == .regular ? .visible : .automatic, for: .navigationBar)
-                .toolbar {
-                    ToolbarItem(placement: .confirmationAction) {
-                        saveButton
+            List {
+                Group {
+                    Section {
+                        newEventTextView
                     }
-                    ToolbarItem(placement: .cancellationAction) {
-                        cancelButton
-                    }
-
-                    ToolbarItem(placement: .keyboard) {
-                        hideButton
-                    }
-                }
-
-        }
-        .onChange(of: editingToDoItem) {
-            setupEditingToDoItem()
-        }
-        .onAppear() {
-            setupEditingToDoItem()
-        }
-    }
-
-    private var contentView: some View {
-        Group {
-            switch horizontalSizeClass {
-            case .regular:
-                regularSizeContentView
-            default:
-                defaultSizeContentView
-            }
-        }
-    }
-
-    private var regularSizeContentView: some View {
-        HStack {
-            Form {
-                textSection
-            }
-            .scrollIndicators(.hidden)
-
-            if !isEditing || UIDevice.current.userInterfaceIdiom != .phone {
-                Form {
-                    detailsSection
-                    deleteSection
-                }
-            }
-        }
-        .animation(.default, value: isEditing)
-    }
-
-    private var defaultSizeContentView: some View {
-        Form {
-            textSection
-            detailsSection
-            deleteSection
-        }
-    }
-
-    private var textSection: some View {
-        Section {
-            TextField("Что надо сделать?", text: $text, axis: .vertical)
-                .lineLimit(5...)
-                .onTapGesture {
-                    isEditing = true
-                }
-                .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
-                    isEditing = false
-                }
-        }
-    }
-
-    private var importanceRow: some View {
-        HStack {
-            Text("Важность")
-
-            Spacer()
-
-            ImportancePicker(importance: $important)
-
-
-        }
-    }
-
-    private var colorPickerRow: some View {
-        HStack {
-            Text("Цвет")
-
-            Circle()
-                .fill(color)
-                .frame(width: isColorToggled ? 24 : 0, alignment: .center)
-                .offset(x: isColorToggled ? -12 : 0)
-                .padding(.leading, 16)
-                .animation(.bouncy(duration: 0.2), value: isColorToggled)
-                .onTapGesture {
-                    isColorPickerPresented = true
-                }
-
-
-            Toggle("", isOn: $isColorToggled)
-
-        }
-        .sheet(isPresented: $isColorPickerPresented) {
-            ColorWheelPicker(color: $color)
-                .presentationDetents([.fraction(3/5)])
-                .presentationDragIndicator(.visible)
-                .background(AppColors.backPrimary)
-        }
-
-    }
-
-    private var toggleRow: some View {
-        Toggle(isOn: $isDueDateToggled) {
-            VStack(alignment: .leading) {
-                Text("Сделать до")
-
-                if isDueDateToggled {
-                    Button {
-                        withAnimation {
-                            isDatePickerShown.toggle()
+                    Section {
+                        priorityCell
+//                        categoryCell
+                        deadlineCell
+                        if viewModel.isDeadlineEnabled {
+                            datePickerCell
                         }
-                    } label: {
-                        Text(
-                            deadline.formatted(
-                                .dateTime.day().month().year()
-                                .locale(.init(identifier: "ru_RU"))
-                            )
-                        )
-                        .font(.caption)
-                        .fontWeight(.semibold)
                     }
-                    .submitScope()
+                    Section {
+                        deleteButtonCell
+                    }
+                }
+                .listRowBackground(Color.backgroundSecondary)
+                .listRowSeparatorTint(.primarySeparator)
+            }
+            .groupedList()
+            .listSectionSpacing(16)
+            .navigationTitle("task")
+            .navigationBarTitleDisplayMode(.inline)
+            .confirmationDialog("", isPresented: $viewModel.isAlertShown) {
+                confirmation
+            }
+            .sheet(isPresented: $viewModel.isCategoryViewShown) {
+                CategoryView(category: $viewModel.category)
+                    .toolbar(.hidden, for: .navigationBar)
+                    .ignoresSafeArea()
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        dismissIfNeeded()
+                    } label: {
+                        Text("cancel")
+                            .font(.todoBody)
+                            .foregroundStyle(.primaryBlue)
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        viewModel.saveItem()
+                        dismiss()
+                    } label: {
+                        Text("save")
+                            .font(.todoBody)
+                            .foregroundStyle(viewModel.canItemBeSaved ? .primaryBlue : .textTertiary)
+                            .bold()
+                    }
+                    .disabled(!viewModel.canItemBeSaved)
                 }
             }
-            .animation(.interactiveSpring, value: isDueDateToggled)
+        }
+        .interactiveDismissDisabled(viewModel.canItemBeSaved)
+    }
+
+    private func dismissIfNeeded() {
+        if viewModel.canItemBeSaved {
+            viewModel.isAlertShown = true
+        } else {
+            dismiss()
         }
     }
 
-    private var datePickerRow: some View {
+    private var newEventTextView: some View {
+        TextField(
+            "",
+            text: $viewModel.text,
+            prompt: Text("task.placeholder").foregroundStyle(.labelTertiary),
+            axis: .vertical
+        )
+        .frame(minHeight: 120, alignment: .topLeading)
+        .focused($isFocused)
+        .foregroundStyle(.labelPrimary)
+        .overlay(
+            HStack {
+                if let color = viewModel.color {
+                    Spacer()
+                    Rectangle()
+                        .fill(color)
+                        .frame(width: 5)
+                        .padding(.trailing, -5)
+                        .padding(.vertical, -12)
+                }
+            }
+        )
+    }
+    private var priorityCell: some View {
+        HStack {
+            Text("priority")
+                .foregroundStyle(.labelPrimary)
+                .truncationMode(.tail)
+            Spacer()
+            Picker("", selection: $viewModel.important) {
+                ForEach(TodoItem.Importance.allCases) { $0.symbol }
+            }
+            .frame(maxWidth: 150)
+            .pickerStyle(.segmented)
+            .backgroundStyle(.supportOverlay)
+        }
+    }
+    private var deadlineCell: some View {
+        VStack {
+            Toggle(isOn: $viewModel.isDeadlineEnabled.animation()) {
+                Text("deadline")
+                    .foregroundStyle(.labelPrimary)
+                    .truncationMode(.tail)
+            }
+            if viewModel.isDeadlineEnabled {
+                HStack {
+                    Text(
+                        viewModel.selectedDeadline.formatted(
+                            .dateTime
+                                .day(.twoDigits)
+                                .month(.wide)
+                                .year()
+                        )
+                    )
+                    .foregroundStyle(.blue)
+                    Spacer()
+                }
+            }
+        }
+    }
+    private var datePickerCell: some View {
         DatePicker(
-            "Дедлайн",
-            selection: $deadline,
-            in: Date(timeIntervalSinceNow: 86400)...,
+            "",
+            selection: $viewModel.selectedDeadline,
             displayedComponents: .date
         )
         .datePickerStyle(.graphical)
     }
 
-    private var detailsSection: some View {
-        Section {
-            importanceRow
-            colorPickerRow
-            toggleRow
-
-            if isDatePickerShown && isDueDateToggled {
-                datePickerRow
-            }
+    private var deleteButtonCell: some View {
+        Button {
+            viewModel.removeItem()
+            dismiss()
+        } label: {
+            Text("delete")
+                .frame(maxWidth: .infinity)
+                .foregroundStyle(viewModel.isItemNew ? .labelTertiary : .red)
         }
+        .disabled(viewModel.isItemNew)
     }
 
-    private var deleteSection: some View {
-        Group {
-            if editingToDoItem != nil {
-                Section {
-                    Button(role: .destructive) {
-                        onDelete()
-                    } label: {
-                        HStack {
-                            Spacer()
-                            Text("Удалить")
-                            Spacer()
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private var saveButton: some View {
-        Button("Сохранить") {
-            let plainText = text.trimmingCharacters(in: .whitespacesAndNewlines)
-
-            if let toDoItem = editingToDoItem {
-                onComplete(
-                    TodoItem(
-                        id: toDoItem.id,
-                        text: plainText,
-                        important: important,
-                        deadline: isDueDateToggled ? deadline : nil,
-                        isDone: toDoItem.isDone, color: isColorToggled ? color.hex : nil,
-                        creationDate: toDoItem.creationDate,
-                        modifiedDate: Date()
-                    )
-                )
-            } else {
-                onComplete(
-                    TodoItem(
-                        text: plainText,
-                        important: important,
-                        deadline: isDueDateToggled ? deadline : nil,
-                        color: isColorToggled ? color.hex : nil
-                    )
-                )
-            }
-        }
-        .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-    }
-
-    private var cancelButton: some View {
-        Button("Отменить") {
-            onDismiss()
-        }
-    }
-
-    private var hideButton: some View {
-        Button("Скрыть", systemImage: "keyboard.chevron.compact.down") {
-            isEditing = false
-
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-        }
-    }
-
-    private func setupEditingToDoItem() {
-        if let editingToDoItem = editingToDoItem {
-            text = editingToDoItem.text
-            important = editingToDoItem.important
-            isColorToggled = editingToDoItem.color != nil
-            isDueDateToggled = editingToDoItem.deadline != nil
-            deadline = editingToDoItem.deadline ?? Date(timeIntervalSinceNow: 86400)
-
-            if let hex = editingToDoItem.color {
-                color = Color(hex: hex)
-            }
-        } else {
-            text = ""
-            important = .ordinary
-            deadline = Date(timeIntervalSinceNow: 86400)
-            isDueDateToggled = false
-            isDatePickerShown = false
-            isColorToggled = false
+    private var confirmation: some View {
+        Button(role: .destructive) {
+            viewModel.isAlertShown.toggle()
+            dismiss()
+        } label: {
+            Text("task.discardChanges")
         }
     }
 }
 
-#Preview {
-    ToDoItemDetail(
-        editingToDoItem: .constant(FileCache.data[0]),
-        onComplete: { _ in },
-        onDismiss: {},
-        onDelete: {}
-    )
-}

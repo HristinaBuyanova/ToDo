@@ -2,118 +2,102 @@
 import SwiftUI
 
 struct ListRow: View {
-    @Binding var toDoItem: TodoItem
 
-    let onComplete: () -> Void
-
-    var body: some View {
-        HStack {
-            CheckmarkView(toDoItem: $toDoItem, onComplete: onComplete)
-
-            VStack(alignment: .leading) {
-                HStack {
-                    if toDoItem.important == .important {
-                        Image(systemName: "exclamationmark.2")
-                            .fontWeight(.bold)
-                            .foregroundStyle(toDoItem.isDone ? Color.secondary : .red)
-                    } else if toDoItem.important == .unimportant {
-                        Image(systemName: "arrow.down")
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.secondary)
-                    }
-
-                    Text(toDoItem.text)
-                        .strikethrough(toDoItem.isDone, color: .secondary)
-                        .foregroundStyle(toDoItem.isDone ? .secondary : .primary)
-                        .lineLimit(3)
-                }
-
-                if let deadline = toDoItem.deadline {
-                    HStack {
-                        Image(systemName: "calendar")
-                        Text(
-                            deadline
-                            .formatted(
-                                .dateTime.day().month().year()
-                                .locale(.init(identifier: "ru_RU"))
-                            )
-                        )
-                    }
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                }
-            }
-            .alignmentGuide(.listRowSeparatorLeading, computeValue: { dimension in
-                return 0
-            })
-            .padding(.leading, 8)
-
-            if let hex = toDoItem.color {
-                Spacer()
-
-                Rectangle()
-                    .fill(Color(hex: hex))
-                    .clipShape(.capsule)
-                    .frame(width: 5)
-                    .padding(.vertical, 8)
-            }
-
-            Spacer()
-            Image(systemName: "chevron.right")
-        }
-    }
-}
-
-#Preview {
-    ListRow(toDoItem: .constant(FileCache.data[1]), onComplete: {})
-}
-
-struct CheckmarkView: View {
-    @Binding var toDoItem: TodoItem
-
-    let size: CGFloat = 24
-    let onComplete: () -> Void
+    let todoItem: TodoItem
+    let color: Color?
+    let onTap: () -> Void
+    let onRadioButtonTap: () -> Void
 
     var body: some View {
         Button {
-            withAnimation(.interactiveSpring) {
-                updateToDoItem()
-            }
+            onTap()
         } label: {
-            if toDoItem.isDone {
-                Circle()
-                    .fill(.green)
-                    .frame(width: size, height: size)
-                    .overlay {
-                        Image(systemName: "checkmark")
-                            .resizable()
-                            .fontWeight(.black)
-                            .foregroundStyle(.white)
-                            .frame(width: size * 0.5, height: size * 0.5)
+            HStack {
+                radioButton
+                    .padding(.trailing, 12)
+                    .onTapGesture {
+                        onRadioButtonTap()
                     }
-            } else {
-                Circle()
-                    .fill(toDoItem.important == .important ? .red.opacity(0.1) : .clear)
-                    .strokeBorder(lineWidth: 1.5)
-                    .foregroundStyle(toDoItem.important == .important ? .red : .primary.opacity(0.2))
-                    .frame(width: size, height: size)
+                VStack(alignment: .leading) {
+                    HStack {
+                        if let priorityImage {
+                            priorityImage
+                        }
+                        text
+                    }
+                    if let deadline = todoItem.deadline {
+                        deadlineView(deadline)
+                    }
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .padding(.trailing, 5)
+                Rectangle()
+                    .fill(color ?? .clear)
+                    .frame(width: 5)
+                    .padding(.vertical, -5)
             }
         }
-        .buttonStyle(PlainButtonStyle())
+        .listRowInsets(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 0))
+        .listRowSeparatorTint(.supportSeparator)
+        .alignmentGuide(.listRowSeparatorLeading) { _ in
+            46
+        }
+
     }
 
-    private func updateToDoItem() {
-        toDoItem = TodoItem(
-            id: toDoItem.id,
-            text: toDoItem.text,
-            important: toDoItem.important,
-            deadline: toDoItem.deadline,
-            isDone: !toDoItem.isDone, 
-            color: toDoItem.color,
-            creationDate: toDoItem.creationDate,
-            modifiedDate: toDoItem.modifiedDate
-        )
-
-        onComplete()
+    private var radioButton: Image {
+        if todoItem.isDone {
+            return Image(.done)
+        }
+        if todoItem.important == .important {
+            return Image(.redCircle)
+        }
+        return Image(.grayCircle)
     }
+
+    private var priorityImage: Image? {
+        switch todoItem.important {
+        case .unimportant:
+            nil
+        case .ordinary:
+            nil
+        case .important:
+            Image(.low)
+        }
+    }
+
+    private var text: some View {
+        Text(todoItem.text)
+            .foregroundStyle(todoItem.isDone ? .labelTertiary : .labelPrimary)
+            .lineLimit(3)
+            .truncationMode(.tail)
+            .strikethrough(todoItem.isDone)
+    }
+
+    private func deadlineView(_ deadline: Date) -> some View {
+        HStack {
+            Image(systemName: "calendar")
+                .foregroundStyle(.labelTertiary)
+            Text(deadline.string())
+                .foregroundStyle(.labelTertiary)
+        }
+    }
+
+
+}
+
+#Preview {
+    ListRow(
+        todoItem: TodoItem(
+            text: "Text",
+            important: .important,
+            deadline: .now,
+            isDone: false,
+            creationDate: .now
+        ),
+        color: .red,
+        onTap: {},
+        onRadioButtonTap: {}
+    )
 }

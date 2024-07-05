@@ -1,28 +1,100 @@
 
 
-import Foundation
+import SwiftUI
+import Combine
 
 final class ViewModel: ObservableObject {
 
-    public var data = [TodoItem(text: "Купить хлеб", important: .important, deadline: Date(), isDone: true), TodoItem(text: "Купить хлеб", important: .ordinary, deadline: Date()), TodoItem(text: "Купить хлеб", important: .important, deadline: Date()), TodoItem(text: "Купить хлеб", important: .important, deadline: Date(), isDone: false), TodoItem(text: "Купить хлеб", important: .important, deadline: Date(), isDone: false)]
+    @Published var text: String
+    @Published var important: TodoItem.Importance
+    @Published var category: Category? {
+        didSet {
+            color = getColorFromCategory()
+        }
+    }
+    @Published var deadline: Date?
+    @Published var modifiedDate: Date?
+    @Published var color: Color?
 
-    func addItem(item: TodoItem) {
-        data.append(item)
+    @Published var isAlertShown = false
+    @Published var isColorPickerShown = false
+    @Published var isCategoryViewShown = false
+
+    @Published var selectedDeadline: Date = .nextDay {
+        didSet {
+            deadline = isDeadlineEnabled ? selectedDeadline.stripTime() : nil
+        }
+    }
+    @Published var isDeadlineEnabled: Bool {
+        didSet {
+            selectedDeadline = isDeadlineEnabled ? (todoItem.deadline ?? .nextDay) : .nextDay
+            deadline = isDeadlineEnabled ? selectedDeadline.stripTime() : nil
+        }
     }
 
-    func filterDataNotDone () -> [TodoItem] {
-        data.filter{ !$0.isDone }
+    var canItemBeSaved: Bool {
+        text != "" &&
+        (
+            text != todoItem.text ||
+            important != todoItem.important ||
+            deadline != todoItem.deadline ||
+            category?.id != todoItem.categoryId
+        )
     }
 
-    func filterDataIsDone () -> [TodoItem] {
-        data.filter{ $0.isDone }
+    var isItemNew: Bool {
+        todoItemCache.items[todoItem.id] == nil
     }
 
-    func changeData (index: Int) -> [TodoItem] {
-        var item = data[index]
-        item.isDone.toggle()
-        data[index] = item
-        return data
+    private let todoItem: TodoItem
+    private let todoItemCache: TodoItemCache
+    private let categoryCache: CategoryCache
+
+    private var cancellables = Set<AnyCancellable>()
+
+    init(
+        todoItem: TodoItem,
+        todoItemCache: TodoItemCache = TodoItemCache.shared,
+        categoryCache: CategoryCache = CategoryCache.shared
+    ) {
+        self.todoItem = todoItem
+        self.todoItemCache = todoItemCache
+        self.categoryCache = categoryCache
+        self.text = todoItem.text
+        self.important = todoItem.important
+        self.deadline = todoItem.deadline
+        self.modifiedDate = todoItem.modifiedDate
+        self.isDeadlineEnabled = todoItem.deadline != nil
+        self.selectedDeadline = todoItem.deadline ?? .nextDay
+        if let categoryId = todoItem.categoryId {
+            category = categoryCache.items[categoryId]
+            if let hex = category?.color {
+                self.color = Color(hex: hex)
+            }
+        }
     }
+
+    func saveItem() {
+        todoItemCache.addItemAndSaveJson(
+            todoItem.copyWith(
+                text: text,
+                important: important,
+                deadline: deadline,
+                modifiedDate: modifiedDate,
+                color: category?.color,
+                categoryId: category?.id
+            )
+        )
+    }
+
+    func removeItem() {
+        todoItemCache.removeItemAndSaveJson(id: todoItem.id)
+    }
+
+    private func getColorFromCategory() -> Color? {
+        guard let hex = category?.color else { return nil }
+        return Color(hex: hex)
+    }
+
 }
 

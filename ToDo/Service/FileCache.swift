@@ -1,106 +1,130 @@
-import Foundation
+import SwiftUI
 
-struct FileCache {
+protocol StringIdentifiable: Identifiable where ID == String {}
 
-    private(set) var toDoItems: [TodoItem] = []
+protocol FileCachableJson {
+    var json: Any { get }
+    static func parse(json: Any) -> Self?
+}
 
-    static let data = [TodoItem(text: "Купить хлеб", important: .important, deadline: Date(), isDone: true), TodoItem(text: "Купить хлеб", important: .ordinary, deadline: Date()), TodoItem(text: "Купить хлеб", important: .important, deadline: Date()), TodoItem(text: "Купить хлеб", important: .important, deadline: Date(), isDone: false), TodoItem(text: "Купить хлеб", important: .important, deadline: Date(), isDone: false)]
+protocol FileCachableCsv {
+    var csv: String { get }
+    static var csvHeader: [String] { get }
+    static func parse(csv: String) -> Self?
+}
 
-    private var documentsDirectory: URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return paths[0]
+typealias FileCachable = StringIdentifiable & FileCachableJson & FileCachableCsv
+
+
+class FileCache<T: FileCachable>: ObservableObject {
+
+    @Published private(set) var items: [String: T] = [:]
+    private let fileManager: FileManager = FileManager.default
+    private let defaultFileName: String
+
+    init(defaultFileName: String) {
+        self.defaultFileName = defaultFileName
     }
 
-    mutating func addToDoItems(_ item: TodoItem) {
-        if !toDoItems.contains(where: { $0.id == item.id }) {
-            toDoItems.append(item)
-        }
+    func addItemAndSaveJson(_ item: T) {
+        addItem(item)
+        try? saveJson()
     }
 
-    mutating func addOrUpdate(_ item: TodoItem) {
-        if let index = toDoItems.firstIndex(where: { item.id == $0.id }) {
-            toDoItems[index] = item
-        } else {
-            toDoItems.append(item)
-        }
+    func removeItemAndSaveJson(id: String) {
+        removeItem(id: id)
+        try? saveJson()
+    }
+
+    func addItem(_ item: T) {
+        items[item.id] = item
     }
 
     @discardableResult
-    mutating func delete(_ id: String) -> TodoItem? {
-        guard let index = toDoItems.firstIndex(where: { id == $0.id }) else { return nil }
-        return toDoItems.remove(at: index)
+    func removeItem(id: String) -> T? {
+        items.removeValue(forKey: id)
     }
 
-    enum FileFormat: String {
-        case json, csv
+    func removeAllItems() {
+        items = [:]
     }
 
-    func save(to file: String, format: FileFormat = .json) throws {
-        let path = documentsDirectory
-            .appending(path: file)
-            .appendingPathExtension(format.rawValue)
-
-        switch format {
-        case .json:
-            try saveToJSON(at: path)
-        case .csv:
-            try saveToCSV(at: path)
-        }
+    private func filePath(_ file: String) -> URL {
+        fileManager
+            .urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appending(path: file, directoryHint: .notDirectory)
     }
 
-    mutating func load(from file: String, format: FileFormat = .json) throws {
-        let path = documentsDirectory
-            .appending(path: file)
-            .appendingPathExtension(format.rawValue)
-
-        switch format {
-        case .json:
-            toDoItems = try loadFromJSON(at: path)
-        case .csv:
-            toDoItems = try loadFromCSV(at: path)
-        }
-    }
 }
 
-    extension FileCache {
+extension FileCache {
 
-        // JSON
-        private func saveToJSON(at path: URL) throws {
-            let items = toDoItems.map { $0.json }
+    func saveJson(to file: String? = nil) throws {
+        let fileName = file ?? defaultFileName
+        let jsonArray = items.values.map { $0.json }
+        let jsonData = try JSONSerialization.data(withJSONObject: jsonArray, options: .prettyPrinted)
+        try jsonData.write(to: filePath(fileName))
+    }
 
-            let data = try JSONSerialization.data(withJSONObject: items, options: .prettyPrinted)
-            try data.write(to: path)
+    func loadJson(from file: String? = nil) throws {
+        let fileName = file ?? defaultFileName
+        let data = try Data(contentsOf: filePath(fileName))
+        let json = try JSONSerialization.jsonObject(with: data)
+        guard let json = json as? [Any] else {
+            throw FileCacheError.parseError
         }
+        let itemsList = json.compactMap { T.parse(json: $0) }
+        items = itemsList.reduce(into: [:], { result, item in
+            result[item.id] = item
+        })
+    }
 
-        private func loadFromJSON(at path: URL) throws -> [TodoItem] {
-            let data = try Data(contentsOf: path)
-            let items = try JSONSerialization.jsonObject(with: data) as! [Any]
-            let toDoItems = items.compactMap { TodoItem.parse(json: $0) }
+}
 
-            return toDoItems
+extension FileCache {
+
+    func saveCSV(to file: String) throws {
+        let csvString: String = "\(T.csvHeader.joined(separator: ","))\n"
+                                + items.values.map({ $0.csv }).joined(separator: "\n")
+        guard let csvData = csvString.data(using: .utf8) else {
+            throw FileCacheError.encodingError
         }
+        try csvData.write(to: filePath(file))
+    }
 
-        // CSV
-        private func saveToCSV(at path: URL) throws {
-            let fields = ["id", "text", "important", "deadline", "isDone", "creationDate", "modifiedDate"]
-            var data = "\"" + fields.joined(separator: "\",\"") + "\"\n"
+    func loadCSV(from file: String) throws {
+        let content = try String(contentsOf: filePath(file), encoding: .utf8)
+        let rows = content.split(separator: "\n").map { String($0) }.dropFirst()
+        let itemsList = rows.compactMap { T.parse(csv: $0) }
+        items = itemsList.reduce(into: [:], { result, item in
+            result[item.id] = item
+        })
+    }
 
-            data += toDoItems
-                .reduce("", { partialResult, todoItem in
-                    return partialResult + todoItem.csv
-                })
+}
 
-            try data.write(to: path, atomically: true, encoding: .utf8)
-        }
+extension FileCache {
 
-        private func loadFromCSV(at path: URL) throws -> [TodoItem] {
-            let data = try String(contentsOf: path)
+    enum FileCacheError: LocalizedError {
+        case parseError, encodingError
 
-            let lines = data.components(separatedBy: .newlines).dropFirst()
-            let toDoItems: [TodoItem] = lines.compactMap { TodoItem.parse(csv: $0) }
-
-            return toDoItems
+        var errorDescription: String? {
+            switch self {
+            case .parseError: "Parsing failed"
+            case .encodingError: "String encoding error"
+            }
         }
     }
 
+}
+
+final class TodoItemCache: FileCache<TodoItem> {
+
+    static let shared = TodoItemCache()
+
+    private override init(defaultFileName: String = "items.json") {
+        super.init(defaultFileName: defaultFileName)
+    }
+
+}
 

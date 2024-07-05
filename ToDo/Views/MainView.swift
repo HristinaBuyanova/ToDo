@@ -3,265 +3,148 @@ import SwiftUI
 
 struct MainView: View {
 
-    @ObservedObject var toDoItemsStore: ToDoItemsSorter
+    //    @ObservedObject var toDoItemsStore: ToDoItemsSorter
 
-    @State private var newToDoItemText: String = ""
-    @State private var editingToDoItem: TodoItem?
-
-    @State private var isDetailPresented: Bool = false
-    @State private var isDetailViewPresenting: Bool = false
-
+    @StateObject var viewModel = ListViewModel()
+    @FocusState private var isFocused
 
     var body: some View {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            NavigationSplitView {
-                listSection
-                    .navigationTitle("Мои Дела")
-            } detail: {
-                detailView
-            }
-        } else {
-            NavigationStack {
-                listSection
-            }
-            .sheet(
-                isPresented: $isDetailPresented,
-                content: {
-                    detailView
-                }
-            )
-        }
-    }
-
-    private var listSection: some View {
-        List {
-            Section(
-                header: HStack {
-                    Text("Выполнено – \(toDoItemsStore.completedCount)")
-                        .contentTransition(.numericText())
-                    Spacer()
-                    settingsMenu
-                }
-            ) {
-                ForEach($toDoItemsStore.currentToDoItems) { toDoItem in
-                    listRow(for: toDoItem)
-                }
-
-                TextField("Новое", text: $newToDoItemText)
-                    .onSubmit {
-                        let plainText = newToDoItemText.trimmingCharacters(in: .whitespacesAndNewlines)
-
-                        if !plainText.isEmpty {
-                            let toDoItem = TodoItem(text: newToDoItemText)
-                            toDoItemsStore.add(toDoItem)
+        NavigationStack {
+            List {
+                Section {
+                    ForEach(viewModel.todoItems) { todoItem in
+                        ListRow(
+                            todoItem: todoItem,
+                            color: viewModel.colorFor(todoItem: todoItem),
+                            onTap: {
+                                viewModel.selectedTodoItem = todoItem
+                                viewModel.todoViewPresented.toggle()
+                            },
+                            onRadioButtonTap: {
+                                viewModel.toggleDone(todoItem)
+                            }
+                        )
+                        .markableAsDone(isDone: todoItem.isDone) {
+                            viewModel.toggleDone(todoItem)
                         }
-
-                        newToDoItemText = ""
+                        .deletable {
+                            viewModel.delete(todoItem)
+                        }
+                        .withInfo {
+                            viewModel.selectedTodoItem = todoItem
+                            viewModel.todoViewPresented.toggle()
+                        }
                     }
-                    .submitLabel(.done)
-                    .padding(.leading, 40)
+                    newEventTextView
+                } header: { headerView }
+                .listRowBackground(Color.backgroundSecondary)
             }
-        }
-        .navigationTitle("Мои дела")
-        .background(AppColors.backPrimary)
-        .scrollContentBackground(.hidden)
-        .environment(\.defaultMinListRowHeight, 56)
-        .overlay(addNewItemButton, alignment: .bottom)
-        .animation(.default, value: toDoItemsStore.currentToDoItems)
-        .toolbar {
-            settingsMenu
-        }
-    }
-
-    private var settingsMenu: some View {
-        Menu("Настройки", systemImage: "line.3.horizontal.decrease.circle") {
-            Button {
-                withAnimation {
-                    toDoItemsStore.areCompletedShown.toggle()
+            .groupedList()
+            .navigationTitle("title")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    calendarButton
                 }
-            } label: {
-                Label(
-                    "\(toDoItemsStore.areCompletedShown ? "Скрыть" : "Показать") выполненные",
-                    systemImage: toDoItemsStore.areCompletedShown ? "eye.slash" : "eye"
+            }
+            .safeAreaInset(edge: .bottom) {
+                floatingButton
+            }
+            .sheet(isPresented: $viewModel.todoViewPresented) {
+                ToDoItemDetail(
+                    viewModel: ViewModel(
+                        todoItem: viewModel.todoItemToOpen
+                    )
                 )
             }
-
-            Divider()
-
-            Menu("Сортировать", systemImage: "arrow.up.arrow.down") {
-                Picker("Опции", selection: $toDoItemsStore.sortingOption) {
-                    ForEach(ToDoItemsSorter.SortingOption.allCases) { option in
-                        Text(option.rawValue)
-                            .tag(option)
-                    }
-
-                }
-
-                Divider()
-
-                Picker("Порядок", selection: $toDoItemsStore.sortingOrder) {
-                    ForEach(ToDoItemsSorter.SortingOrder.allCases) { order in
-                        Text(order.rawValue)
-                            .tag(order)
-                    }
-                }
+            .fullScreenCover(isPresented: $viewModel.calendarViewPresented) {
+                CalendarView()
+                    .ignoresSafeArea()
             }
         }
     }
 
-    private var addNewItemButton: some View {
+    private var newEventTextView: some View {
+        TextField(
+            "",
+            text: $viewModel.newTodo,
+            prompt: Text("Новая заметка").foregroundStyle(.labelTertiary)
+        )
+        .listRowInsets(EdgeInsets(top: 16, leading: 60, bottom: 16, trailing: 16))
+        .focused($isFocused)
+        .foregroundStyle(.labelPrimary)
+        .onSubmit {
+            isFocused = false
+            if !viewModel.newTodo.isEmpty {
+                viewModel.addItem(TodoItem(text: viewModel.newTodo))
+                viewModel.newTodo = ""
+                isFocused = true
+            }
+        }
+    }
+
+    private var headerView: some View {
+        HStack {
+            Text("done.\(viewModel.doneCount)")
+                .foregroundStyle(.labelTertiary)
+            Spacer()
+            menu
+        }
+        .textCase(.none)
+        .padding(.vertical, 6)
+        .padding(.horizontal, -10)
+    }
+
+    private var menu: some View {
+        Menu {
+            Section {
+                Button {
+                    viewModel.toggleShowCompleted()
+                } label: {
+                    Label(
+                        viewModel.showCompleted ? "hide" : "show",
+                        systemImage: viewModel.showCompleted ? "eye.slash" : "eye"
+                    )
+                }
+            }
+            Section {
+                Button {
+                    viewModel.toggleSortByPriority()
+                } label: {
+                    Label(
+                        viewModel.sortType.descriptionOfNext,
+                        systemImage: "arrow.up.arrow.down"
+                    )
+                }
+            }
+        } label: {
+            Image(systemName: "slider.horizontal.3")
+                .resizable()
+                .foregroundStyle(.labelPrimary, .blue)
+                .frame(width: 20, height: 20, alignment: .center)
+        }
+    }
+    private var floatingButton: some View {
         Button {
-            isDetailViewPresenting = true
-            editingToDoItem = nil
-            isDetailPresented = true
+            viewModel.todoViewPresented.toggle()
         } label: {
             Image(systemName: "plus.circle.fill")
                 .resizable()
                 .foregroundStyle(.white, .blue)
-                .frame(width: 44, height: 44)
-                .shadow(radius: 8, y: 4)
-        }
-        .padding(.bottom, 20)
-    }
-
-    private var detailView: some View {
-        Group {
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                if isDetailViewPresenting {
-                    ToDoItemDetail(
-                        editingToDoItem: $editingToDoItem,
-                        onComplete: { toDoItem in onSave(toDoItem) },
-                        onDismiss: { onDismiss() },
-                        onDelete: { onDelete() }
-                    )
-                } else {
-                    ContentUnavailableView("Выберите задачу", systemImage: "filemenu.and.selection")
-                }
-            } else {
-                ToDoItemDetail(
-                    editingToDoItem: $editingToDoItem,
-                    onComplete: { toDoItem in onSave(toDoItem) },
-                    onDismiss: { onDismiss() },
-                    onDelete: { onDelete() }
-                )
-            }
+                .frame(width: 44, height: 44, alignment: .center)
+                .shadow(color: .gray, radius: 5, x: 0, y: 8)
+                .padding(.vertical, 10)
         }
     }
 
-    private func listRow(for toDoItem: Binding<TodoItem>) -> some View {
-        ListRow(toDoItem: toDoItem,
-                onComplete: { toDoItemsStore.addOrUpdate(toDoItem.wrappedValue) })
-        .onTapGesture {
-            presentDetailView(for: toDoItem.wrappedValue)
-        }
-        .swipeActions(edge: .leading) {
-            completeAction(for: toDoItem.wrappedValue)
-        }
-        .swipeActions(edge: .trailing) {
-            deleteAction(for: toDoItem.wrappedValue)
-            infoAction(for: toDoItem.wrappedValue)
-        }
-    }
-
-    private func completeAction(for toDoItem: TodoItem) -> some View {
+    private var calendarButton: some View {
         Button {
-            toDoItemsStore.addOrUpdate(
-                TodoItem(
-                    id: toDoItem.id,
-                    text: toDoItem.text,
-                    important: toDoItem.important,
-                    deadline: toDoItem.deadline,
-                    isDone: !toDoItem.isDone,
-                    creationDate: toDoItem.creationDate,
-                    modifiedDate: toDoItem.modifiedDate
-                )
-            )
+            viewModel.calendarViewPresented.toggle()
         } label: {
-            Image(systemName: toDoItem.isDone ? "circle" : "checkmark.circle.fill")
-        }
-        .tint(.green)
-    }
-
-    private func deleteAction(for toDoItem: TodoItem) -> some View {
-        Button(role: .destructive) {
-            editingToDoItem = toDoItem
-            onDelete()
-        } label: {
-            Image(systemName: "trash.fill")
-        }
-    }
-
-    private func infoAction(for toDoItem: TodoItem) -> some View {
-        Button {
-            presentDetailView(for: toDoItem)
-        } label: {
-            Image(systemName: "info.circle.fill")
-        }
-    }
-
-    private func presentDetailView(for toDoItem: TodoItem) {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            isDetailViewPresenting = true
-            editingToDoItem = toDoItem
-        } else {
-            isDetailPresented = true
-            editingToDoItem = toDoItem
-        }
-    }
-
-    private func discardDetailView() {
-        isDetailViewPresenting = false
-        editingToDoItem = nil
-        isDetailPresented = false
-    }
-
-    private func onSave(_ toDoItem: TodoItem) {
-        withAnimation {
-            toDoItemsStore.addOrUpdate(toDoItem)
-        }
-
-        discardDetailView()
-    }
-
-    private func onDismiss() {
-        discardDetailView()
-    }
-
-    private func onDelete() {
-        withAnimation {
-            if let editingToDoItem = editingToDoItem {
-                toDoItemsStore.delete(editingToDoItem)
-            }
-        }
-
-        discardDetailView()
-    }
-}
-
-struct ListHeader: View {
-    @Binding var toDoItems: [TodoItem]
-    @Binding var isExpanded: Bool
-
-    var completedCount: Int {
-        toDoItems
-            .filter { $0.isDone }
-            .count
-    }
-
-    var body: some View {
-        HStack {
-            Text("Выполнено – \(completedCount)")
-                .textCase(.none)
-                .contentTransition(.numericText(value: Double(completedCount)))
+            Image(systemName: "calendar")
+                .resizable()
+                .foregroundStyle(.labelPrimary, .blue)
+                .frame(width: 20, height: 20, alignment: .center)
         }
     }
 }
-
-struct ToDoItemsList_Previews: PreviewProvider {
-    static var previews: some View {
-        let toDoItemsStore = ToDoItemsSorter()
-
-        return MainView(toDoItemsStore: toDoItemsStore)
-    }
-}
-

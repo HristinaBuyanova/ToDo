@@ -1,36 +1,49 @@
 
 import Foundation
 
-extension TodoItem {
+extension TodoItem: FileCachableCsv {
+
     var csv: String {
-        guard
-            let json = json as? [String: Any],
-            let lastField = Properties.allCases.last else { return "" }
-        var csv = ""
+        "\(id),\(text),\(important == .medium ? " " : important.rawValue)," +
+        "\(deadline == nil ? " " : String(deadline!.timeIntervalSince1970))," +
+        "\(String(isDone)),\(String(creationDate.timeIntervalSince1970))," +
+        "\(modifiedDate == nil ? " " : String(modifiedDate!.timeIntervalSince1970))," +
+        "\(color == nil ? " " : color!),\(categoryId == nil ? " " : categoryId!)"
+    }
 
-        Properties.allCases.forEach { field in
-            let value = "\"\(json[field.rawValue] ?? "")\""
-            let separator = field != lastField ? "," : "\n"
-            csv += value + separator
-        }
-
-        return csv
+    static var csvHeader: [String] {
+        [
+            Keys.id, Keys.text, Keys.important, Keys.deadline, Keys.isDone,
+            Keys.creationDate, Keys.modifiedDate, Keys.color, Keys.categoryId
+        ].map { $0.rawValue }
     }
 
     static func parse(csv: String) -> TodoItem? {
-        let values = csv
-            .components(separatedBy: "\",\"")
+        let row = csv.split(separator: ",").map { String($0) }
 
-        guard values.count == 8 else { return nil }
+        var dict = [String: String]()
+        for (index, value) in row.enumerated() {
+            dict[csvHeader[index]] = value
+        }
 
-        let id = "\(values[0].dropFirst())"
-        let text = values[1]
-        let important = Importance(rawValue: values[2]) ?? .ordinary
-        let deadline = Date(anyTimeIntervalSince1970: values[3])
-        let color = values[4]
-        let isDone = Bool(values[5]) ?? false
-        let creationDate = Date(anyTimeIntervalSince1970: values[6]) ?? Date()
-        let modifiedDate = Date(anyTimeIntervalSince1970: "\(values[7].dropLast())")
+        guard let id = dict[Keys.id.rawValue],
+              let text = dict[Keys.text.rawValue],
+              let isDoneString = dict[Keys.isDone.rawValue],
+              let isDone = Bool(isDoneString),
+              let creationDateString = dict[Keys.creationDate.rawValue],
+              let creationDateTimeInterval = TimeInterval(creationDateString)
+        else {
+            return nil
+        }
+
+        let creationDate = Date(timeIntervalSince1970: creationDateTimeInterval)
+        let important = important(rawValue: dict[Keys.important.rawValue] ?? "") ?? .medium
+        let deadline = TimeInterval(dict[Keys.deadline.rawValue] ?? "")
+                            .flatMap { Date(timeIntervalSince1970: $0) }
+        let modifiedDate = TimeInterval(dict[Keys.modifiedDate.rawValue] ?? "")
+                            .flatMap { Date(timeIntervalSince1970: $0) }
+        let color = dict[Keys.color.rawValue] == " " ? nil : dict[Keys.color.rawValue]
+        let categoryId = dict[Keys.categoryId.rawValue] == " " ? nil : dict[Keys.categoryId.rawValue]
 
         return TodoItem(
             id: id,
@@ -38,10 +51,12 @@ extension TodoItem {
             important: important,
             deadline: deadline,
             isDone: isDone,
-            color: color,
             creationDate: creationDate,
-            modifiedDate: modifiedDate
+            modifiedDate: modifiedDate,
+            color: color,
+            categoryId: categoryId
         )
     }
 
 }
+
