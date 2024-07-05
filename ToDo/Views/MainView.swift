@@ -37,7 +37,7 @@ struct MainView: View {
                     }
                     newEventTextView
                 } header: { headerView }
-                .listRowBackground(Color.backgroundSecondary)
+                .listRowBackground(Color.backSecondary)
             }
             .groupedList()
             .navigationTitle("title")
