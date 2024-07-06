@@ -49,12 +49,10 @@ final class CalendarCollectionViewCell: UICollectionViewCell {
         }
     }
 
-    // MARK: - Public methods
     func configureCell(text: String) {
         titleLabel.setAttributedText(text.replacingOccurrences(of: " ", with: "\n"), lineSpacing: 10)
     }
 
-    // MARK: - Private methods
     private func setupViews() {
         contentView.addSubview(cardView)
         cardView.addSubview(titleLabel)
@@ -86,7 +84,6 @@ final class CalendarCollectionViewCell: UICollectionViewCell {
 
 }
 
-// MARK: - UILabel
 private extension UILabel {
     func setAttributedText(_ text: String, lineSpacing: CGFloat = 10) {
         let paragraphStyle = NSMutableParagraphStyle()

@@ -2,10 +2,8 @@ import UIKit
 import SwiftUI
 import Combine
 
-// MARK: - CalendarViewController
 final class CalendarViewController: UIViewController {
 
-    // MARK: - Private properties
     private let calendarView: ViewCalendar
     private let viewModel: CalendarViewModel
 
@@ -20,7 +18,6 @@ final class CalendarViewController: UIViewController {
         action: #selector(closeButtonTapped)
     )
 
-    // MARK: - Initializers
     init(
         view: ViewCalendar = ViewCalendar(),
         viewModel: CalendarViewModel = CalendarViewModel()
@@ -34,7 +31,6 @@ final class CalendarViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Overridden methods
     override func loadView() {
         view = calendarView
     }
@@ -46,7 +42,6 @@ final class CalendarViewController: UIViewController {
         setupBindings()
     }
 
-    // MARK: - Private methods
     private func configureView() {
         calendarView.delegate = self
         calendarView.tableView.delegate = self
@@ -94,7 +89,6 @@ final class CalendarViewController: UIViewController {
 
 }
 
-// MARK: - CalendarUIViewDelegate
 extension CalendarViewController: CalendarUIViewDelegate {
 
     func didTapButton(_ button: UIButton) {
@@ -107,7 +101,6 @@ extension CalendarViewController: CalendarUIViewDelegate {
 
 }
 
-// MARK: - UITableViewDataSource, UITableViewDelegate
 extension CalendarViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -195,7 +188,6 @@ extension CalendarViewController: UITableViewDataSource, UITableViewDelegate {
 
 }
 
-// MARK: - UICollectionViewDataSource
 extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

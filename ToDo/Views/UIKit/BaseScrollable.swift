@@ -5,7 +5,6 @@ protocol BaseScrollableView: AnyObject {
     var scrollView: UIScrollView { get }
 }
 
-
 class BaseScrollableViewController: UIViewController {
 
 

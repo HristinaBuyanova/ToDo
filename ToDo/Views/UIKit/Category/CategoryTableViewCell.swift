@@ -72,7 +72,6 @@ final class CategoryTableViewCell: UITableViewCell {
     }
 
     private func setupLayout() {
-//        contentView.alignSubview(cardView, with: Constants.CardView.inset)
 
         NSLayoutConstraint.activate([
             cardView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),

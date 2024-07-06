@@ -1,7 +1,6 @@
 import Foundation
 import Combine
 
-// MARK: - CalendarViewModel
 final class CalendarViewModel: ObservableObject {
 
     @Published var data: [(date: Date, events: [TodoItem])] = []

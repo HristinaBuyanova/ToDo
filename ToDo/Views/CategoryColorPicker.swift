@@ -12,7 +12,7 @@ struct CategoryColorPicker: View {
                 brightness: $brightness
             )
             ColorPickerSlider(
-                title: "colorPicker.brightness",
+                title: "Яркость",
                 value: $brightness
             )
         }

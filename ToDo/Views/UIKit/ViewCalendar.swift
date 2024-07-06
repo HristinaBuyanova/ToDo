@@ -73,7 +73,6 @@ final class ViewCalendar: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Private methods
     private func setupViews() {
         [collectionView, tableView, separatorView, addButton].forEach {
             addSubview($0)
