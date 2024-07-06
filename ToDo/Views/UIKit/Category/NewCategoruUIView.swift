@@ -23,7 +23,7 @@ final class NewCategoryUIView: UIView, BaseScrollableView {
     private let contentView = UIView()
     private let textField: TextFieldWithInset = {
         let textField = TextFieldWithInset()
-        textField.placeholder = String(localized: "category.new.placeholder")
+        textField.placeholder = "Название новой категории"
         textField.layer.cornerRadius = 8
         textField.backgroundColor = .backSecondary
         textField.font = .systemFont(ofSize: 15, weight: .medium)

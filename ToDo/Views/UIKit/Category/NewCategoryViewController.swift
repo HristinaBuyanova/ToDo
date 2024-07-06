@@ -11,7 +11,7 @@ final class NewCategoryViewController: BaseScrollableViewController {
     private var cancellables = Set<AnyCancellable>()
 
     private lazy var saveButton = UIBarButtonItem(
-        title: String(localized: "save"),
+        title: "Сохранить",
         style: .done,
         target: self,
         action: #selector(saveButtonTapped)
@@ -62,7 +62,7 @@ final class NewCategoryViewController: BaseScrollableViewController {
     }
 
     private func configureNavigationBar() {
-        navigationItem.title = String(localized: "category.new")
+        navigationItem.title = "Новая категория"
         navigationItem.setRightBarButton(saveButton, animated: false)
         navigationItem.setLeftBarButton(backButton, animated: false)
     }

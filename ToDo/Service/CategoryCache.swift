@@ -16,19 +16,19 @@ final class CategoryCache: FileCache<Category> {
         ),
         Category(
             id: "DEFAULT-CATEGORY-STUDY-ID",
-            text: String(localized: "category.study"),
+            text: "Учеба",
             color: "#007aff",
             creationDate: Date(timeIntervalSince1970: 2)
         ),
         Category(
             id: "DEFAULT-CATEGORY-HOBBY-ID",
-            text: String(localized: "category.hobby"),
+            text: "Хобби",
             color: "#34c759",
             creationDate: Date(timeIntervalSince1970: 3)
         ),
         Category(
             id: "DEFAULT-CATEGORY-OTHER-ID",
-            text: String(localized: "category.other"),
+            text: "Другое",
             color: nil,
             creationDate: Date(timeIntervalSince1970: 4)
         )

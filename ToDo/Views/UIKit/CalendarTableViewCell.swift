@@ -57,7 +57,7 @@ final class CalendarTableViewCell: UITableViewCell {
         strikeThroughView.isHidden = !todoItem.isDone
         if let hex = todoItem.color {
             colorView.isHidden = false
-            colorView.backgroundColor = UIColor(named: hex)
+            colorView.backgroundColor = UIColor(hex: hex)
         } else {
             colorView.isHidden = true
         }
@@ -75,9 +75,6 @@ final class CalendarTableViewCell: UITableViewCell {
         self.backgroundColor = .backSecondary
         contentView.backgroundColor = .backSecondary
         cardView.backgroundColor = .backSecondary
-//        [self, contentView, cardView].forEach { view in
-//            view.backgroundColor = .backSecondary
-//        }
     }
 
     private func setupLayout() {

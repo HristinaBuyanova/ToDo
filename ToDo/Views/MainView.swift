@@ -40,7 +40,7 @@ struct MainView: View {
                 .listRowBackground(Color.backSecondary)
             }
             .groupedList()
-            .navigationTitle("title")
+            .navigationTitle("Мои дела")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -85,7 +85,7 @@ struct MainView: View {
 
     private var headerView: some View {
         HStack {
-            Text("done.\(viewModel.doneCount)")
+            Text("Выполнено - \(viewModel.doneCount)")
                 .foregroundStyle(.labelTertiary)
             Spacer()
             menu
@@ -102,7 +102,7 @@ struct MainView: View {
                     viewModel.toggleShowCompleted()
                 } label: {
                     Label(
-                        viewModel.showCompleted ? "hide" : "show",
+                        viewModel.showCompleted ? "скрыть" : "показать",
                         systemImage: viewModel.showCompleted ? "eye.slash" : "eye"
                     )
                 }

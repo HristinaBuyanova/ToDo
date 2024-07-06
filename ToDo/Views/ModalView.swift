@@ -32,7 +32,7 @@ struct ToDoItemDetail: View {
             }
             .groupedList()
             .listSectionSpacing(16)
-            .navigationTitle("task")
+            .navigationTitle("Дело")
             .navigationBarTitleDisplayMode(.inline)
             .confirmationDialog("", isPresented: $viewModel.isAlertShown) {
                 confirmation
@@ -59,7 +59,7 @@ struct ToDoItemDetail: View {
         Button {
             dismissIfNeeded()
         } label: {
-            Text("cancel")
+            Text("отмена")
                 .foregroundStyle(.blue)
         }
     }
@@ -69,7 +69,7 @@ struct ToDoItemDetail: View {
             viewModel.saveItem()
             dismiss()
         } label: {
-            Text("save")
+            Text("сохранить")
                 .foregroundStyle(viewModel.canItemBeSaved ? .blue : .labelTertiary)
                 .bold()
         }
@@ -87,7 +87,7 @@ struct ToDoItemDetail: View {
         TextField(
             "",
             text: $viewModel.text,
-            prompt: Text("task.placeholder").foregroundStyle(.labelTertiary),
+            prompt: Text("Что нужно сделать?").foregroundStyle(.labelTertiary),
             axis: .vertical
         )
         .frame(minHeight: 120, alignment: .topLeading)
@@ -108,7 +108,7 @@ struct ToDoItemDetail: View {
     }
     private var priorityCell: some View {
         HStack {
-            Text("priority")
+            Text("Важность")
                 .foregroundStyle(.labelPrimary)
                 .truncationMode(.tail)
             Spacer()
@@ -123,19 +123,14 @@ struct ToDoItemDetail: View {
     private var deadlineCell: some View {
         VStack {
             Toggle(isOn: $viewModel.isDeadlineEnabled.animation()) {
-                Text("deadline")
+                Text("Дедлайн")
                     .foregroundStyle(.labelPrimary)
                     .truncationMode(.tail)
             }
             if viewModel.isDeadlineEnabled {
                 HStack {
                     Text(
-                        viewModel.selectedDeadline.formatted(
-                            .dateTime
-                                .day(.twoDigits)
-                                .month(.wide)
-                                .year()
-                        )
+                        viewModel.selectedDeadline.string()
                     )
                     .foregroundStyle(.blue)
                     Spacer()
@@ -157,7 +152,7 @@ struct ToDoItemDetail: View {
             viewModel.removeItem()
             dismiss()
         } label: {
-            Text("delete")
+            Text("Удалить")
                 .frame(maxWidth: .infinity)
                 .foregroundStyle(viewModel.isItemNew ? .labelTertiary : .red)
         }
@@ -178,7 +173,7 @@ struct ToDoItemDetail: View {
             viewModel.isCategoryViewShown.toggle()
         } label: {
             HStack {
-                Text("category")
+                Text("Категория")
                     .foregroundStyle(.labelPrimary)
                     .truncationMode(.tail)
                 Spacer()

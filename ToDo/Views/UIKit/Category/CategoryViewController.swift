@@ -20,7 +20,7 @@ final class CategoryViewController: UIViewController {
     )
 
     private lazy var closeButton = UIBarButtonItem(
-        title: String(localized: "close"),
+        title: "Закрыть",
         style: .plain,
         target: self,
         action: #selector(closeButtonTapped)
@@ -58,7 +58,7 @@ final class CategoryViewController: UIViewController {
     }
 
     private func configureNavigationBar() {
-        navigationItem.title = String(localized: "category")
+        navigationItem.title = "Категория"
         navigationItem.setRightBarButton(addButton, animated: false)
         navigationItem.setLeftBarButton(closeButton, animated: false)
     }

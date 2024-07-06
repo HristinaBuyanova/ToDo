@@ -56,7 +56,7 @@ final class CalendarViewController: UIViewController {
     }
 
     private func configureNavigationBar() {
-        navigationItem.title = String(localized: "title")
+        navigationItem.title = "Мои дела"
         navigationController?.navigationBar.tintColor = .labelPrimary
         navigationItem.setRightBarButton(closeButton, animated: false)
     }
@@ -74,8 +74,8 @@ final class CalendarViewController: UIViewController {
 
     private func dateString(for date: Date) -> String {
         switch date {
-        case .distantFuture: String(localized: "calendar.other")
-        default: date.dayAndMonthString
+        case .distantFuture: "Другое"
+        default: date.string()
         }
     }
 
@@ -138,7 +138,7 @@ extension CalendarViewController: UITableViewDataSource, UITableViewDelegate {
         SwipeActionsConfigurationBuilder()
             .addAction(
                 style: .normal,
-                title: String(localized: "done"),
+                title: "Сделано",
                 image: UIImage(systemName: "checkmark.circle.fill"),
                 backgroundColor: .green
             ) { [weak self] (_, _, completionHandler) in
@@ -155,7 +155,7 @@ extension CalendarViewController: UITableViewDataSource, UITableViewDelegate {
         SwipeActionsConfigurationBuilder()
             .addAction(
                 style: .normal,
-                title: String(localized: "undone"),
+                title: "Не сделано",
                 image: UIImage(systemName: "x.circle.fill"),
                 backgroundColor: .red
             ) { [weak self] (_, _, completionHandler) in

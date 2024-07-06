@@ -90,7 +90,7 @@ struct ListRow: View {
 #Preview {
     ListRow(
         todoItem: TodoItem(
-            text: "Text",
+            text: "Купить хлеб",
             important: .important,
             deadline: .now,
             isDone: false,

@@ -94,8 +94,8 @@ extension TodoItem {
 
         var symbol: AnyView {
             switch self {
-            case .unimportant: AnyView(Text("no"))
-            case .ordinary: AnyView(Text("no"))
+            case .unimportant: AnyView(Image(.down))
+            case .ordinary: AnyView(Text("нет"))
             case .important: AnyView(Image(.low))
             }
         }

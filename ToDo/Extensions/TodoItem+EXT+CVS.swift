@@ -15,23 +15,7 @@ extension TodoItem: FileCachableCsv {
         columns.append(color ?? " ")
         columns.append(categoryId ?? " ")
         return columns.joined(separator: ",")
-
-//        "\(id),\(text),\(important == .medium ? " " : important.rawValue)," +
-//        "\(deadline == nil ? " " : String(deadline!.timeIntervalSince1970))," +
-//        "\(String(isDone)),\(String(creationDate.timeIntervalSince1970))," +
-//        "\(modifiedDate == nil ? " " : String(modifiedDate!.timeIntervalSince1970))," +
-//        "\(color == nil ? " " : color!),\(categoryId == nil ? " " : categoryId!)"
     }
-
-//    var first = "\(id),\(text),\(important == .medium ? " " : important.rawValue),"
-//    var second = "\(deadline == nil ? " " : String(deadline!.timeIntervalSince1970)),"
-//    var tree = "\(String(isDone)),\(String(creationDate.timeIntervalSince1970)),"
-//    var four = "\(modifiedDate == nil ? " " : String(modifiedDate!.timeIntervalSince1970)),"
-//    var five = "\(color == nil ? " " : color!),\(categoryId == nil ? " " : categoryId!)"
-//
-//    var csv: String {
-//
-//    }
 
     static var csvHeader: [String] {
         [

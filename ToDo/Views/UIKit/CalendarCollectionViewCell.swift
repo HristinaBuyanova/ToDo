@@ -56,8 +56,9 @@ final class CalendarCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Private methods
     private func setupViews() {
-        contentView.addSubview(titleLabel)
         contentView.addSubview(cardView)
+        cardView.addSubview(titleLabel)
+
     }
 
     private func setupAppearance() {
