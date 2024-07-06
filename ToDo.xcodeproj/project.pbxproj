@@ -16,6 +16,22 @@
 		6E796EE42C38982C00CB9323 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EE32C38982B00CB9323 /* ListViewModel.swift */; };
 		6E796EE82C38AEB500CB9323 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EE72C38AEB500CB9323 /* CalendarView.swift */; };
 		6E796EEA2C38B07600CB9323 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EE92C38B07600CB9323 /* ViewModifiers.swift */; };
+		6E796EED2C38B21500CB9323 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EEC2C38B21500CB9323 /* CategoryView.swift */; };
+		6E796EEF2C38B29000CB9323 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EEE2C38B29000CB9323 /* CategoryViewController.swift */; };
+		6E796EF12C38B30F00CB9323 /* CategoryUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EF02C38B30F00CB9323 /* CategoryUIView.swift */; };
+		6E796EF32C38B41C00CB9323 /* CalendarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EF22C38B41C00CB9323 /* CalendarTableViewCell.swift */; };
+		6E796EF52C38B46300CB9323 /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EF42C38B46300CB9323 /* CalendarCollectionViewCell.swift */; };
+		6E796EF72C38B4C300CB9323 /* CalendarTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EF62C38B4C300CB9323 /* CalendarTableViewHeader.swift */; };
+		6E796EF92C38B51300CB9323 /* ViewCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EF82C38B51300CB9323 /* ViewCalendar.swift */; };
+		6E796EFB2C38B56B00CB9323 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EFA2C38B56B00CB9323 /* CalendarViewController.swift */; };
+		6E796EFD2C38B65B00CB9323 /* CalendarViewModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EFC2C38B65B00CB9323 /* CalendarViewModal.swift */; };
+		6E796EFF2C38B89400CB9323 /* SwipeActionsConfigurationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EFE2C38B89400CB9323 /* SwipeActionsConfigurationBuilder.swift */; };
+		6E796F012C38BAD200CB9323 /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796F002C38BAD200CB9323 /* CategoryTableViewCell.swift */; };
+		6E796F032C38BCF800CB9323 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796F022C38BCF800CB9323 /* CategoryViewModel.swift */; };
+		6E796F052C38BF7300CB9323 /* NewCategoruUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796F042C38BF7300CB9323 /* NewCategoruUIView.swift */; };
+		6E796F072C38BF8D00CB9323 /* NewCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796F062C38BF8D00CB9323 /* NewCategoryViewController.swift */; };
+		6E796F092C38C0B300CB9323 /* BaseScrollable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796F082C38C0B300CB9323 /* BaseScrollable.swift */; };
+		6E796F0B2C38C40D00CB9323 /* CategoryColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796F0A2C38C40D00CB9323 /* CategoryColorPicker.swift */; };
 		6EAE57342C3451E300B56E02 /* ToDoItem+EXT+Json.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAE57332C3451E300B56E02 /* ToDoItem+EXT+Json.swift */; };
 		6EAE57362C3454A700B56E02 /* TodoItem+EXT+CVS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAE57352C3454A700B56E02 /* TodoItem+EXT+CVS.swift */; };
 		6EAE57392C34627F00B56E02 /* ToDoItemsSorter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAE57382C34627F00B56E02 /* ToDoItemsSorter.swift */; };
@@ -56,6 +72,22 @@
 		6E796EE32C38982B00CB9323 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
 		6E796EE72C38AEB500CB9323 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		6E796EE92C38B07600CB9323 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
+		6E796EEC2C38B21500CB9323 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
+		6E796EEE2C38B29000CB9323 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
+		6E796EF02C38B30F00CB9323 /* CategoryUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryUIView.swift; sourceTree = "<group>"; };
+		6E796EF22C38B41C00CB9323 /* CalendarTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTableViewCell.swift; sourceTree = "<group>"; };
+		6E796EF42C38B46300CB9323 /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
+		6E796EF62C38B4C300CB9323 /* CalendarTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTableViewHeader.swift; sourceTree = "<group>"; };
+		6E796EF82C38B51300CB9323 /* ViewCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCalendar.swift; sourceTree = "<group>"; };
+		6E796EFA2C38B56B00CB9323 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
+		6E796EFC2C38B65B00CB9323 /* CalendarViewModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModal.swift; sourceTree = "<group>"; };
+		6E796EFE2C38B89400CB9323 /* SwipeActionsConfigurationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeActionsConfigurationBuilder.swift; sourceTree = "<group>"; };
+		6E796F002C38BAD200CB9323 /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
+		6E796F022C38BCF800CB9323 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
+		6E796F042C38BF7300CB9323 /* NewCategoruUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoruUIView.swift; sourceTree = "<group>"; };
+		6E796F062C38BF8D00CB9323 /* NewCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryViewController.swift; sourceTree = "<group>"; };
+		6E796F082C38C0B300CB9323 /* BaseScrollable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseScrollable.swift; sourceTree = "<group>"; };
+		6E796F0A2C38C40D00CB9323 /* CategoryColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryColorPicker.swift; sourceTree = "<group>"; };
 		6EAE57332C3451E300B56E02 /* ToDoItem+EXT+Json.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+EXT+Json.swift"; sourceTree = "<group>"; };
 		6EAE57352C3454A700B56E02 /* TodoItem+EXT+CVS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TodoItem+EXT+CVS.swift"; sourceTree = "<group>"; };
 		6EAE57382C34627F00B56E02 /* ToDoItemsSorter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemsSorter.swift; sourceTree = "<group>"; };
@@ -99,9 +131,29 @@
 		6E796EE62C38AE9A00CB9323 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				6E796EEB2C38B1F400CB9323 /* Category */,
 				6E796EE72C38AEB500CB9323 /* CalendarView.swift */,
+				6E796EFA2C38B56B00CB9323 /* CalendarViewController.swift */,
+				6E796EF22C38B41C00CB9323 /* CalendarTableViewCell.swift */,
+				6E796EF42C38B46300CB9323 /* CalendarCollectionViewCell.swift */,
+				6E796EF62C38B4C300CB9323 /* CalendarTableViewHeader.swift */,
+				6E796EF82C38B51300CB9323 /* ViewCalendar.swift */,
+				6E796F082C38C0B300CB9323 /* BaseScrollable.swift */,
 			);
 			path = UIKit;
+			sourceTree = "<group>";
+		};
+		6E796EEB2C38B1F400CB9323 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				6E796EEC2C38B21500CB9323 /* CategoryView.swift */,
+				6E796EEE2C38B29000CB9323 /* CategoryViewController.swift */,
+				6E796EF02C38B30F00CB9323 /* CategoryUIView.swift */,
+				6E796F002C38BAD200CB9323 /* CategoryTableViewCell.swift */,
+				6E796F042C38BF7300CB9323 /* NewCategoruUIView.swift */,
+				6E796F062C38BF8D00CB9323 /* NewCategoryViewController.swift */,
+			);
+			path = Category;
 			sourceTree = "<group>";
 		};
 		6EAE57372C3455C500B56E02 /* Service */ = {
@@ -110,6 +162,7 @@
 				6EE7E0CD2C220A47005B1C2B /* FileCache.swift */,
 				6EAE57382C34627F00B56E02 /* ToDoItemsSorter.swift */,
 				6E796EE12C388D9E00CB9323 /* CategoryCache.swift */,
+				6E796EFE2C38B89400CB9323 /* SwipeActionsConfigurationBuilder.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -123,6 +176,7 @@
 				6EB896542C2F669400ACE282 /* ModalView.swift */,
 				6EB896562C2F8C2200ACE282 /* ImpotancePicker.swift */,
 				6E3B88362C35595900226077 /* ColorPicker.swift */,
+				6E796F0A2C38C40D00CB9323 /* CategoryColorPicker.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -149,6 +203,8 @@
 				6E3B88322C35474600226077 /* Important.swift */,
 				6E796EDF2C388D6500CB9323 /* Category.swift */,
 				6E796EE32C38982B00CB9323 /* ListViewModel.swift */,
+				6E796EFC2C38B65B00CB9323 /* CalendarViewModal.swift */,
+				6E796F022C38BCF800CB9323 /* CategoryViewModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -309,23 +365,39 @@
 				6E6169392C35B57700968138 /* Image.swift in Sources */,
 				6E796EE02C388D6500CB9323 /* Category.swift in Sources */,
 				6E3B88332C35474600226077 /* Important.swift in Sources */,
+				6E796EF72C38B4C300CB9323 /* CalendarTableViewHeader.swift in Sources */,
+				6E796F032C38BCF800CB9323 /* CategoryViewModel.swift in Sources */,
 				6E796EE82C38AEB500CB9323 /* CalendarView.swift in Sources */,
 				6EAE57362C3454A700B56E02 /* TodoItem+EXT+CVS.swift in Sources */,
+				6E796EF52C38B46300CB9323 /* CalendarCollectionViewCell.swift in Sources */,
 				6EAE57392C34627F00B56E02 /* ToDoItemsSorter.swift in Sources */,
 				6EB896352C2CB2C700ACE282 /* Title.swift in Sources */,
+				6E796EFB2C38B56B00CB9323 /* CalendarViewController.swift in Sources */,
+				6E796EFF2C38B89400CB9323 /* SwipeActionsConfigurationBuilder.swift in Sources */,
 				6E3B88352C35543300226077 /* Color.swift in Sources */,
 				6ED3A5F72C20372D000C3632 /* ContentView.swift in Sources */,
 				6ED3A6032C2040A6000C3632 /* TodoItem.swift in Sources */,
 				6EAE57342C3451E300B56E02 /* ToDoItem+EXT+Json.swift in Sources */,
+				6E796EED2C38B21500CB9323 /* CategoryView.swift in Sources */,
 				6E796EEA2C38B07600CB9323 /* ViewModifiers.swift in Sources */,
 				6EB8962F2C2B07E900ACE282 /* ListRow.swift in Sources */,
+				6E796EFD2C38B65B00CB9323 /* CalendarViewModal.swift in Sources */,
 				6EB896552C2F669400ACE282 /* ModalView.swift in Sources */,
 				6EB896322C2C36C000ACE282 /* DateEXT.swift in Sources */,
+				6E796F072C38BF8D00CB9323 /* NewCategoryViewController.swift in Sources */,
 				6EE7E0CE2C220A47005B1C2B /* FileCache.swift in Sources */,
+				6E796F0B2C38C40D00CB9323 /* CategoryColorPicker.swift in Sources */,
+				6E796EF12C38B30F00CB9323 /* CategoryUIView.swift in Sources */,
+				6E796F052C38BF7300CB9323 /* NewCategoruUIView.swift in Sources */,
+				6E796F092C38C0B300CB9323 /* BaseScrollable.swift in Sources */,
+				6E796EEF2C38B29000CB9323 /* CategoryViewController.swift in Sources */,
+				6E796EF92C38B51300CB9323 /* ViewCalendar.swift in Sources */,
 				6E3B88372C35595900226077 /* ColorPicker.swift in Sources */,
 				6EB8962D2C2AEF3E00ACE282 /* MainView.swift in Sources */,
 				6ED3A5F52C20372D000C3632 /* ToDoApp.swift in Sources */,
 				6EB896532C2EF03500ACE282 /* ViewModal.swift in Sources */,
+				6E796EF32C38B41C00CB9323 /* CalendarTableViewCell.swift in Sources */,
+				6E796F012C38BAD200CB9323 /* CategoryTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

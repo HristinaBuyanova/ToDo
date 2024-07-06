@@ -31,8 +31,8 @@ final class ListViewModel: ObservableObject {
         case important, addition
         var descriptionOfNext: String {
             switch self {
-            case .important: String(localized: "sort.byAddition")
-            case .addition: String(localized: "sort.byPriority")
+            case .important: "Сортировать по дате создания"
+            case .addition: "Сортировать по важности"
             }
         }
     }

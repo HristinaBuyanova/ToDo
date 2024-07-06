@@ -17,7 +17,7 @@ struct ToDoItemDetail: View {
                     }
                     Section {
                         priorityCell
-//                        categoryCell
+                        categoryCell
                         deadlineCell
                         if viewModel.isDeadlineEnabled {
                             datePickerCell
@@ -27,12 +27,12 @@ struct ToDoItemDetail: View {
                         deleteButtonCell
                     }
                 }
-                .listRowBackground(Color.backgroundSecondary)
-                .listRowSeparatorTint(.primarySeparator)
+                .listRowBackground(Color.backSecondary)
+                .listRowSeparatorTint(.supportSeparator)
             }
             .groupedList()
             .listSectionSpacing(16)
-            .navigationTitle("task")
+            .navigationTitle("Дело")
             .navigationBarTitleDisplayMode(.inline)
             .confirmationDialog("", isPresented: $viewModel.isAlertShown) {
                 confirmation
@@ -44,29 +44,35 @@ struct ToDoItemDetail: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        dismissIfNeeded()
-                    } label: {
-                        Text("cancel")
-                            .font(.todoBody)
-                            .foregroundStyle(.primaryBlue)
-                    }
+                  cancelButton
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        viewModel.saveItem()
-                        dismiss()
-                    } label: {
-                        Text("save")
-                            .font(.todoBody)
-                            .foregroundStyle(viewModel.canItemBeSaved ? .primaryBlue : .textTertiary)
-                            .bold()
-                    }
+                    saveButton
                     .disabled(!viewModel.canItemBeSaved)
                 }
             }
         }
         .interactiveDismissDisabled(viewModel.canItemBeSaved)
+    }
+
+    var cancelButton: some View {
+        Button {
+            dismissIfNeeded()
+        } label: {
+            Text("отмена")
+                .foregroundStyle(.blue)
+        }
+    }
+
+    var saveButton: some View {
+        Button {
+            viewModel.saveItem()
+            dismiss()
+        } label: {
+            Text("сохранить")
+                .foregroundStyle(viewModel.canItemBeSaved ? .blue : .labelTertiary)
+                .bold()
+        }
     }
 
     private func dismissIfNeeded() {
@@ -81,7 +87,7 @@ struct ToDoItemDetail: View {
         TextField(
             "",
             text: $viewModel.text,
-            prompt: Text("task.placeholder").foregroundStyle(.labelTertiary),
+            prompt: Text("Что нужно сделать?").foregroundStyle(.labelTertiary),
             axis: .vertical
         )
         .frame(minHeight: 120, alignment: .topLeading)
@@ -102,7 +108,7 @@ struct ToDoItemDetail: View {
     }
     private var priorityCell: some View {
         HStack {
-            Text("priority")
+            Text("Важность")
                 .foregroundStyle(.labelPrimary)
                 .truncationMode(.tail)
             Spacer()
@@ -117,19 +123,14 @@ struct ToDoItemDetail: View {
     private var deadlineCell: some View {
         VStack {
             Toggle(isOn: $viewModel.isDeadlineEnabled.animation()) {
-                Text("deadline")
+                Text("Дедлайн")
                     .foregroundStyle(.labelPrimary)
                     .truncationMode(.tail)
             }
             if viewModel.isDeadlineEnabled {
                 HStack {
                     Text(
-                        viewModel.selectedDeadline.formatted(
-                            .dateTime
-                                .day(.twoDigits)
-                                .month(.wide)
-                                .year()
-                        )
+                        viewModel.selectedDeadline.string()
                     )
                     .foregroundStyle(.blue)
                     Spacer()
@@ -151,7 +152,7 @@ struct ToDoItemDetail: View {
             viewModel.removeItem()
             dismiss()
         } label: {
-            Text("delete")
+            Text("Удалить")
                 .frame(maxWidth: .infinity)
                 .foregroundStyle(viewModel.isItemNew ? .labelTertiary : .red)
         }
@@ -164,6 +165,35 @@ struct ToDoItemDetail: View {
             dismiss()
         } label: {
             Text("task.discardChanges")
+        }
+    }
+
+    private var categoryCell: some View {
+        Button {
+            viewModel.isCategoryViewShown.toggle()
+        } label: {
+            HStack {
+                Text("Категория")
+                    .foregroundStyle(.labelPrimary)
+                    .truncationMode(.tail)
+                Spacer()
+                if let category = viewModel.category {
+                    HStack(spacing: 1) {
+                        Text(category.text)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 3)
+                            .foregroundStyle(.labelPrimary)
+                        if let hex = category.color {
+                            Circle()
+                                .stroke(.black, lineWidth: 1)
+                                .fill(Color(hex: hex))
+                                .frame(width: 20, height: 20)
+                        }
+                    }
+                }
+            }
         }
     }
 }

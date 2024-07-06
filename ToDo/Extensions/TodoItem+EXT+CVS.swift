@@ -4,11 +4,17 @@ import Foundation
 extension TodoItem: FileCachableCsv {
 
     var csv: String {
-        "\(id),\(text),\(important == .medium ? " " : important.rawValue)," +
-        "\(deadline == nil ? " " : String(deadline!.timeIntervalSince1970))," +
-        "\(String(isDone)),\(String(creationDate.timeIntervalSince1970))," +
-        "\(modifiedDate == nil ? " " : String(modifiedDate!.timeIntervalSince1970))," +
-        "\(color == nil ? " " : color!),\(categoryId == nil ? " " : categoryId!)"
+        var columns: [String] = []
+        columns.append(id)
+        columns.append("\"\(text)\"")
+        columns.append(important.rawValue)
+        columns.append(deadline?.string() ?? " ")
+        columns.append("\(isDone)")
+        columns.append(creationDate.string())
+        columns.append(modifiedDate?.string() ?? " ")
+        columns.append(color ?? " ")
+        columns.append(categoryId ?? " ")
+        return columns.joined(separator: ",")
     }
 
     static var csvHeader: [String] {
@@ -37,7 +43,7 @@ extension TodoItem: FileCachableCsv {
         }
 
         let creationDate = Date(timeIntervalSince1970: creationDateTimeInterval)
-        let important = important(rawValue: dict[Keys.important.rawValue] ?? "") ?? .medium
+        let important = Importance(rawValue: dict[Keys.important.rawValue] ?? "") ?? .ordinary
         let deadline = TimeInterval(dict[Keys.deadline.rawValue] ?? "")
                             .flatMap { Date(timeIntervalSince1970: $0) }
         let modifiedDate = TimeInterval(dict[Keys.modifiedDate.rawValue] ?? "")
