@@ -89,7 +89,7 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: CategoryTableViewCell = tableView.dequeueReusableCell()
+        let cell: CategoryTableViewCell = tableView.dequeueReusableCell(withIdentifier: CategoryTableViewCell.identifier) as! CategoryTableViewCell
         let category = categoryViewModel.categoriesList[indexPath.row]
         cell.configureCell(category: category)
         if self.category?.wrappedValue == category {

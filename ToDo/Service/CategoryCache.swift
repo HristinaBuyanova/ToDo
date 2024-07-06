@@ -10,7 +10,7 @@ final class CategoryCache: FileCache<Category> {
     private let defaultCategories: [Category] = [
         Category(
             id: "DEFAULT-CATEGORY-WORK-ID",
-            text: String(localized: "category.work"),
+            text: "Работа",
             color: "#ff3b30",
             creationDate: Date(timeIntervalSince1970: 1)
         ),
