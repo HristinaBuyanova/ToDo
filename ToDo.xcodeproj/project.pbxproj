@@ -39,6 +39,7 @@
 		6E796F0B2C38C40D00CB9323 /* CategoryColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796F0A2C38C40D00CB9323 /* CategoryColorPicker.swift */; };
 		6E9CD87B2C4153F500BC2755 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 6E9CD87A2C4153F500BC2755 /* .swiftlint.yml */; };
 		6E9CD87D2C41AEAC00BC2755 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9CD87C2C41AEAC00BC2755 /* Logger.swift */; };
+		6E9CD87F2C41C8F400BC2755 /* FileCachePackage in Resources */ = {isa = PBXBuildFile; fileRef = 6E9CD87E2C41C8F400BC2755 /* FileCachePackage */; };
 		6EAE57342C3451E300B56E02 /* ToDoItem+EXT+Json.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAE57332C3451E300B56E02 /* ToDoItem+EXT+Json.swift */; };
 		6EAE57362C3454A700B56E02 /* TodoItem+EXT+CVS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAE57352C3454A700B56E02 /* TodoItem+EXT+CVS.swift */; };
 		6EAE57392C34627F00B56E02 /* ToDoItemsSorter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAE57382C34627F00B56E02 /* ToDoItemsSorter.swift */; };
@@ -101,6 +102,7 @@
 		6E796F0A2C38C40D00CB9323 /* CategoryColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryColorPicker.swift; sourceTree = "<group>"; };
 		6E9CD87A2C4153F500BC2755 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		6E9CD87C2C41AEAC00BC2755 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		6E9CD87E2C41C8F400BC2755 /* FileCachePackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FileCachePackage; sourceTree = "<group>"; };
 		6EAE57332C3451E300B56E02 /* ToDoItem+EXT+Json.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+EXT+Json.swift"; sourceTree = "<group>"; };
 		6EAE57352C3454A700B56E02 /* TodoItem+EXT+CVS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TodoItem+EXT+CVS.swift"; sourceTree = "<group>"; };
 		6EAE57382C34627F00B56E02 /* ToDoItemsSorter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemsSorter.swift; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 		6ED3A5E82C20372D000C3632 = {
 			isa = PBXGroup;
 			children = (
+				6E9CD87E2C41C8F400BC2755 /* FileCachePackage */,
 				6E9CD87A2C4153F500BC2755 /* .swiftlint.yml */,
 				6ED3A5F32C20372D000C3632 /* ToDo */,
 				6EE7E0D42C24CE45005B1C2B /* ToDoTests */,
@@ -398,6 +401,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E9CD87F2C41C8F400BC2755 /* FileCachePackage in Resources */,
 				6E9CD87B2C4153F500BC2755 /* .swiftlint.yml in Resources */,
 				6ED3A5FC2C20372F000C3632 /* Preview Assets.xcassets in Resources */,
 				6ED3A5F92C20372F000C3632 /* Assets.xcassets in Resources */,

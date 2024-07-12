@@ -2,3 +2,4 @@ disabled_rules:
 - identifier_name
 - force_cast
 - nesting
+- trailing_comma
