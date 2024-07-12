@@ -1,25 +1,30 @@
 import Foundation
 
-// extension URLSession {
-// func dataTask(for urlRequest: URLRequest) async throws -> (Data, URLResponse) {
-//    return try await withCheckedThrowingContinuation { continuation in
-//    let task = self.dataTask(with: urlRequest) { data, response, error in
-//    if let error = error {
-//    continuation.resume(throwing: error)
-//    } else if let data = data, let response = response {
-//    continuation.resume(returning: (data, response))
-//    } else {
-//    continuation.resume(throwing: NSError(domain: "InvalidResponse", code: 0, userInfo: nil))
-//    }
-//    }
-//    task.resume()
-//    continuation.onCancellation {
-//    task.cancel()
-//    }
-//    }
-// }
-// }
-//
-// func data(for urlRequest: URLRequest) async throws -> (Data, URLResponse) {
-//
-// }
+extension URLSession {
+
+    func dataTask(for urlRequest: URLRequest) async throws -> (Data, URLResponse) {
+        try await withCheckedThrowingContinuation { continuation in
+            let task = self.dataTask(with: urlRequest) { data, response, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else if let data = data, let response = response {
+                    continuation.resume(returning: (data, response))
+                } else {
+                    let unknowError = NSError(domain: "Unknow Error", code: 0, userInfo: nil)
+                    continuation.resume(throwing: unknowError)
+                }
+            }
+
+            task.resume()
+
+            Task.init {
+                do {
+                    _ = try Task.checkCancellation()
+                } catch {
+                    task.cancel()
+                    continuation.resume(throwing: URLError(.cancelled))
+                }
+            }
+        }
+    }
+}
