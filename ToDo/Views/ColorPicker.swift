@@ -63,7 +63,6 @@ struct ColorWheelPicker: View {
     ColorWheelPicker(color: .constant(.red))
 }
 
-
 struct ColorWheel: View {
     @Binding var hue: Double
     @Binding var saturation: Double
@@ -124,7 +123,6 @@ struct ColorWheel: View {
                         }
                     }
 
-
                 if let location = location {
                     Circle()
                         .stroke(.white, lineWidth: 8)
@@ -174,9 +172,8 @@ struct ColorWheel: View {
                 hue = angle.degrees / 360
                 saturation = Double(distance / radius)
             }
-            .onEnded { value in
+            .onEnded { _ in
                 location = nil
             }
     }
 }
-

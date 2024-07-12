@@ -1,4 +1,3 @@
-
 import Foundation
 
 extension TodoItem: FileCachableCsv {
@@ -65,4 +64,3 @@ extension TodoItem: FileCachableCsv {
     }
 
 }
-

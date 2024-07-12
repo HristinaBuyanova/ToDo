@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 struct MainView: View {
@@ -148,7 +147,6 @@ struct MainView: View {
         }
     }
 }
-
 
 #Preview {
     MainView()

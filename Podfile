@@ -3,6 +3,7 @@
 
 target 'ToDo' do
  
+  use_frameworks!
   pod 'SwiftLint'
 
   target 'ToDoTests' do

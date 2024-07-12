@@ -112,13 +112,17 @@ extension CalendarViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView: CalendarTableViewHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: CalendarTableViewHeader.identifier) as! CalendarTableViewHeader
+        let headerView: CalendarTableViewHeader = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: CalendarTableViewHeader.identifier
+        ) as! CalendarTableViewHeader
         headerView.configure(with: dateString(for: viewModel.data[section].date))
         return headerView
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: CalendarTableViewCell = tableView.dequeueReusableCell(withIdentifier: CalendarTableViewCell.identifier) as! CalendarTableViewCell
+        let cell: CalendarTableViewCell = tableView.dequeueReusableCell(
+            withIdentifier: CalendarTableViewCell.identifier
+        ) as! CalendarTableViewCell
         let todoItem = viewModel.data[indexPath.section].events[indexPath.row]
         cell.configureCell(todoItem: todoItem)
         return cell
@@ -198,7 +202,9 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let cell: CalendarCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: CalendarCollectionViewCell.identifier, for: indexPath) as! CalendarCollectionViewCell
+        let cell: CalendarCollectionViewCell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: CalendarCollectionViewCell.identifier, for: indexPath
+        ) as! CalendarCollectionViewCell
         cell.configureCell(text: dateString(for: viewModel.data[indexPath.row].date))
         return cell
     }
@@ -207,6 +213,4 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
         let indexPathForTableView = IndexPath(row: 0, section: indexPath.item)
         calendarView.tableView.scrollToRow(at: indexPathForTableView, at: .top, animated: true)
     }
-
 }
-

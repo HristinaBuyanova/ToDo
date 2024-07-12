@@ -1,8 +1,6 @@
-
 import SwiftUI
 
 struct ToDoItemDetail: View {
-
 
     @StateObject var viewModel: ViewModel
     @FocusState private var isFocused
@@ -197,4 +195,3 @@ struct ToDoItemDetail: View {
         }
     }
 }
-
