@@ -1,6 +1,5 @@
 import UIKit
 
-
 final class CategoryTableViewCell: UITableViewCell {
 
     static var identifier = "TableCell"
@@ -27,7 +26,6 @@ final class CategoryTableViewCell: UITableViewCell {
         return view
     }()
 
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -39,12 +37,10 @@ final class CategoryTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-
     override public func layoutSubviews() {
         super.layoutSubviews()
         colorView.layer.cornerRadius = 0.5 * colorView.bounds.size.width
     }
-
 
     func configureCell(category: Category) {
         titleLabel.text = category.text
@@ -55,7 +51,6 @@ final class CategoryTableViewCell: UITableViewCell {
             colorView.isHidden = true
         }
     }
-
 
     private func setupViews() {
         contentView.addSubview(cardView)
@@ -86,7 +81,7 @@ final class CategoryTableViewCell: UITableViewCell {
             colorView.heightAnchor.constraint(equalToConstant: 20),
             colorView.widthAnchor.constraint(equalToConstant: 20),
 
-            titleLabel.leadingAnchor.constraint(equalTo: colorView.trailingAnchor,constant: 10),
+            titleLabel.leadingAnchor.constraint(equalTo: colorView.trailingAnchor, constant: 10),
             titleLabel.topAnchor.constraint(greaterThanOrEqualTo: cardView.topAnchor),
             titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: cardView.bottomAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: cardView.centerYAnchor),

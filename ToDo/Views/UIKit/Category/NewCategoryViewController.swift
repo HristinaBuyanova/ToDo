@@ -2,9 +2,7 @@ import UIKit
 import SwiftUI
 import Combine
 
-
 final class NewCategoryViewController: BaseScrollableViewController {
-
 
     @ObservedObject private var viewModel: NewCategoryViewModel
     private let newCategoryView: NewCategoryUIView
@@ -24,7 +22,6 @@ final class NewCategoryViewController: BaseScrollableViewController {
         action: #selector(backButtonTapped)
     )
 
-
     init(
         view: NewCategoryUIView = NewCategoryUIView(),
         viewModel: NewCategoryViewModel = NewCategoryViewModel()
@@ -38,7 +35,6 @@ final class NewCategoryViewController: BaseScrollableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-
     override func loadView() {
         view = newCategoryView
     }
@@ -50,7 +46,6 @@ final class NewCategoryViewController: BaseScrollableViewController {
         hideKeyboardWhenTappedAround()
         setupBindings()
     }
-
 
     private func configureView() {
         newCategoryView.delegate = self
@@ -96,4 +91,3 @@ extension NewCategoryViewController: NewCategoryUIViewDelegate {
     }
 
 }
-

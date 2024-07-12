@@ -1,7 +1,6 @@
-
-//import SwiftUI
+// import SwiftUI
 //
-//struct ImportancePicker: View {
+// struct ImportancePicker: View {
 //    @Binding var importance: Importance
 //
 //    var body: some View {
@@ -15,4 +14,4 @@
 //        }
 //        .pickerStyle(.segmented)
 //    }
-//}
+// }

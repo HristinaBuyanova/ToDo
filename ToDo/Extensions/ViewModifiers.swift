@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 extension View {
@@ -49,7 +48,7 @@ struct InfoSwipe: ViewModifier {
             } label: {
                 Label("info", systemImage: "info.circle.fill")
             }
-            .tint(.grayLight)
+            .tint(.myGrayLight)
         }
     }
 

@@ -1,7 +1,5 @@
-
 import SwiftUI
 import Combine
-
 
 final class CategoryViewModel: ObservableObject {
 
@@ -66,4 +64,3 @@ final class NewCategoryViewModel: ObservableObject {
     }
 
 }
-

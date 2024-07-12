@@ -1,7 +1,6 @@
+// import Foundation
 
-//import Foundation
-//
-//class ToDoItemsSorter: ObservableObject {
+// class ToDoItemsSorter: ObservableObject {
 //    enum SortingOption: String, Identifiable, CaseIterable {
 //        var id: String {
 //            rawValue
@@ -130,4 +129,4 @@
 //            }
 //        }
 //    }
-//}
+// }

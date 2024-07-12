@@ -1,17 +1,13 @@
 import UIKit
 
-
 protocol NewCategoryUIViewDelegate: AnyObject {
     func didChangeTextField(text: String)
 }
 
-
 final class NewCategoryUIView: UIView, BaseScrollableView {
-
 
     weak var delegate: NewCategoryUIViewDelegate?
     let scrollView = UIScrollView()
-
 
     private enum Constants {
         static let inset: CGFloat = 20
@@ -30,7 +26,6 @@ final class NewCategoryUIView: UIView, BaseScrollableView {
         return textField
     }()
 
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -42,7 +37,6 @@ final class NewCategoryUIView: UIView, BaseScrollableView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 
     func addColorPickerAndLayout(_ view: UIView) {
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -149,4 +143,3 @@ final class TextFieldWithInset: UITextField {
     }
 
 }
-

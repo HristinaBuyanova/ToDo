@@ -19,7 +19,9 @@ final class ViewCalendar: UIView {
         tableView.estimatedSectionHeaderHeight = 20
         tableView.contentInset.bottom = 50
         tableView.register(CalendarTableViewCell.self, forCellReuseIdentifier: CalendarTableViewCell.identifier)
-        tableView.register(CalendarTableViewHeader.self, forHeaderFooterViewReuseIdentifier: CalendarTableViewHeader.identifier)
+        tableView.register(
+            CalendarTableViewHeader.self, forHeaderFooterViewReuseIdentifier: CalendarTableViewHeader.identifier
+        )
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -35,7 +37,9 @@ final class ViewCalendar: UIView {
         )
         collectionView.backgroundColor = .backPrimary
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 5, right: 10)
-        collectionView.register(CalendarCollectionViewCell.self, forCellWithReuseIdentifier: CalendarCollectionViewCell.identifier)
+        collectionView.register(
+            CalendarCollectionViewCell.self, forCellWithReuseIdentifier: CalendarCollectionViewCell.identifier
+        )
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
@@ -98,7 +102,7 @@ final class ViewCalendar: UIView {
             separatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
             separatorView.trailingAnchor.constraint(equalTo: trailingAnchor),
             separatorView.heightAnchor.constraint(equalToConstant: 1),
-            separatorView.topAnchor.constraint(equalTo: collectionView.bottomAnchor,constant: 5),
+            separatorView.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 5),
 
             tableView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
             tableView.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 5),
@@ -117,4 +121,3 @@ final class ViewCalendar: UIView {
     }
 
 }
-

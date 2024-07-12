@@ -15,7 +15,6 @@ protocol FileCachableCsv {
 
 typealias FileCachable = StringIdentifiable & FileCachableJson & FileCachableCsv
 
-
 class FileCache<T: FileCachable>: ObservableObject {
 
     @Published private(set) var items: [String: T] = [:]
@@ -127,4 +126,3 @@ final class TodoItemCache: FileCache<TodoItem> {
     }
 
 }
-

@@ -1,5 +1,3 @@
-
-
 import SwiftUI
 import Combine
 
@@ -97,4 +95,3 @@ final class ViewModel: ObservableObject {
     }
 
 }
-

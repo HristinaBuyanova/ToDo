@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 struct ListRow: View {
@@ -83,7 +82,6 @@ struct ListRow: View {
                 .foregroundStyle(.labelTertiary)
         }
     }
-
 
 }
 

@@ -1,9 +1,6 @@
-
 import UIKit
 
-
 final class CategoryUIView: UIView {
-
 
     let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -16,7 +13,6 @@ final class CategoryUIView: UIView {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
-
 
     private enum Constants {
         static let inset: CGFloat = 5

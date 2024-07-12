@@ -36,7 +36,6 @@ final class CalendarCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             cardView.layer.borderColor = UIColor.supportSeparator.cgColor
@@ -96,4 +95,3 @@ private extension UILabel {
         )
     }
 }
-

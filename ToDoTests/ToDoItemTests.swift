@@ -1,4 +1,3 @@
-
 import XCTest
 @testable import ToDo
 
@@ -32,7 +31,7 @@ func testTodoItemInitialization() {
         XCTAssertEqual(todoItem.modifiedDate, modifiedDate)
     }
 
-//func testTodoItemJSONSerialization() {
+// func testTodoItemJSONSerialization() {
 //        let dateFormatter = DateFormatter()
 //        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
 //        let id = "1"

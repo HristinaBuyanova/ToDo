@@ -1,4 +1,3 @@
-
 import Foundation
 
 struct Category: StringIdentifiable {
@@ -111,4 +110,3 @@ extension Category: FileCachableCsv {
     }
 
 }
-
