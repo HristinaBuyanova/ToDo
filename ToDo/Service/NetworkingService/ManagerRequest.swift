@@ -50,6 +50,7 @@ final class ManagerRequest {
         request.httpMethod = "POST"
         request.setValue(valueToken, forHTTPHeaderField: "Authorization")
         request.setValue(revision, forHTTPHeaderField: "X-Last-Known-Revision")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = body
         return request
     }
