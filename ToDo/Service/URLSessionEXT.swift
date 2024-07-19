@@ -17,15 +17,6 @@ extension URLSession {
             }
 
             task.resume()
-
-//            Task.init {
-//                do {
-//                    _ = try Task.checkCancellation()
-//                } catch {
-//                    task.cancel()
-//                    continuation.resume(throwing: URLError(.cancelled))
-//                }
-//            }
         }
     }
 }

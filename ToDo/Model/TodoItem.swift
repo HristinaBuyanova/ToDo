@@ -12,6 +12,7 @@ struct TodoItem: StringIdentifiable, Codable {
     let modifiedDate: Date?
     let color: String?
     let categoryId: String?
+    let files: [String]?
 
     init(
         id: String = UUID().uuidString,
@@ -22,7 +23,8 @@ struct TodoItem: StringIdentifiable, Codable {
         creationDate: Date = .now,
         modifiedDate: Date? = nil,
         color: String? = nil,
-        categoryId: String? = nil
+        categoryId: String? = nil,
+        files: [String]? = nil
     ) {
         self.id = id
         self.text = text
@@ -33,7 +35,20 @@ struct TodoItem: StringIdentifiable, Codable {
         self.modifiedDate = modifiedDate
         self.color = color
         self.categoryId = categoryId
+        self.files = files
     }
+
+    enum CodingKeys: String, CodingKey {
+        case id, text
+        case important = "importance"
+        case deadline
+        case isDone = "done"
+        case creationDate = "created_at"
+        case modifiedDate = "changed_at"
+        case color
+        case categoryId
+        case files
+            }
 
     func copyWith(
         text: String? = nil,
@@ -144,4 +159,3 @@ extension TodoItem {
         )
     }
 }
-

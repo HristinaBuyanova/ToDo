@@ -5,18 +5,7 @@ final class ManagerRequest {
     let urlHive = UrlToren.url.rawValue
     let valueToken = UrlToren.token.rawValue
 
-//    let path = "/todo"
-//    let host = "beta.mrdekk.ru"
-//
-//    private func createURL() -> URL? {
-//        var components = URLComponents()
-//        components.scheme = "https"
-//        components.host = host
-//        components.path = path
-//        return components.url
-//    }
-
-    func requestGET() throws -> URLRequest? {
+    func requestGET() throws -> URLRequest {
         guard let url = URL(string: urlHive) else {
         print("Неверный формат ссылки")
             throw NSError()
@@ -50,7 +39,9 @@ final class ManagerRequest {
         return request
     }
 
-    func requestPOST(revision: String) throws -> URLRequest? {
+    func requestPOST(revision: String, item: TodoItem) throws -> URLRequest? {
+        let encoder = JSONEncoder()
+        let body = try encoder.encode(item)
         guard let url = URL(string: urlHive) else {
         print("Неверный формат ссылки")
             throw NSError()
@@ -59,6 +50,7 @@ final class ManagerRequest {
         request.httpMethod = "POST"
         request.setValue(valueToken, forHTTPHeaderField: "Authorization")
         request.setValue(revision, forHTTPHeaderField: "X-Last-Known-Revision")
+        request.httpBody = body
         return request
     }
 

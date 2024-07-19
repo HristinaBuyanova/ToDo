@@ -3,3 +3,5 @@ disabled_rules:
 - force_cast
 - nesting
 - trailing_comma
+- discouraged_direct_init
+- force_try

@@ -19,6 +19,7 @@
 		6E7961E62C495657007C5991 /* ManagerRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7961E52C495657007C5991 /* ManagerRequest.swift */; };
 		6E7961E82C496086007C5991 /* ServerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7961E72C496086007C5991 /* ServerError.swift */; };
 		6E7961EA2C4A8ED8007C5991 /* URL+Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7961E92C4A8ED8007C5991 /* URL+Token.swift */; };
+		6E7961EC2C4A905E007C5991 /* TodoItemBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7961EB2C4A905E007C5991 /* TodoItemBackend.swift */; };
 		6E796EE02C388D6500CB9323 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EDF2C388D6500CB9323 /* Category.swift */; };
 		6E796EE22C388D9E00CB9323 /* CategoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EE12C388D9E00CB9323 /* CategoryCache.swift */; };
 		6E796EE42C38982C00CB9323 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E796EE32C38982B00CB9323 /* ListViewModel.swift */; };
@@ -86,6 +87,7 @@
 		6E7961E52C495657007C5991 /* ManagerRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerRequest.swift; sourceTree = "<group>"; };
 		6E7961E72C496086007C5991 /* ServerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerError.swift; sourceTree = "<group>"; };
 		6E7961E92C4A8ED8007C5991 /* URL+Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Token.swift"; sourceTree = "<group>"; };
+		6E7961EB2C4A905E007C5991 /* TodoItemBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemBackend.swift; sourceTree = "<group>"; };
 		6E796EDF2C388D6500CB9323 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		6E796EE12C388D9E00CB9323 /* CategoryCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCache.swift; sourceTree = "<group>"; };
 		6E796EE32C38982B00CB9323 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 				6E796EE32C38982B00CB9323 /* ListViewModel.swift */,
 				6E796EFC2C38B65B00CB9323 /* CalendarViewModal.swift */,
 				6E796F022C38BCF800CB9323 /* CategoryViewModel.swift */,
+				6E7961EB2C4A905E007C5991 /* TodoItemBackend.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -529,6 +532,7 @@
 				6E796EED2C38B21500CB9323 /* CategoryView.swift in Sources */,
 				6E7961EA2C4A8ED8007C5991 /* URL+Token.swift in Sources */,
 				6E9CD87D2C41AEAC00BC2755 /* Logger.swift in Sources */,
+				6E7961EC2C4A905E007C5991 /* TodoItemBackend.swift in Sources */,
 				6E796EEA2C38B07600CB9323 /* ViewModifiers.swift in Sources */,
 				6EB8962F2C2B07E900ACE282 /* ListRow.swift in Sources */,
 				6E13662F2C40744900EFEBFD /* URLSessionEXT.swift in Sources */,
