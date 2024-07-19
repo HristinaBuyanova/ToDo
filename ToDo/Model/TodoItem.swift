@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
 
-struct TodoItem: StringIdentifiable {
+struct TodoItem: StringIdentifiable, Codable {
 
     let id: String
     let text: String
@@ -75,7 +75,7 @@ struct TodoItem: StringIdentifiable {
 
 extension TodoItem {
 
-    enum Importance: String, CaseIterable, Identifiable, Comparable {
+    enum Importance: String, CaseIterable, Identifiable, Comparable, Codable {
         private static func minimum(_ lhs: Self, _ rhs: Self) -> Self {
             switch (lhs, rhs) {
             case (.important, _), (_, .important): .important
@@ -88,7 +88,9 @@ extension TodoItem {
             (lhs != rhs) && (lhs == Self.minimum(lhs, rhs))
         }
 
-        case important, ordinary, unimportant
+        case important = "important"
+        case ordinary = "basic"
+        case unimportant = "low"
 
         var id: Self { self }
 
@@ -142,3 +144,4 @@ extension TodoItem {
         )
     }
 }
+
