@@ -3,6 +3,7 @@ import Combine
 
 final class ListViewModel: ObservableObject {
 
+    var data = NetworkingService()
     @Published var todoItems: [TodoItem] = []
     @Published var todoViewPresented: Bool = false {
         didSet {

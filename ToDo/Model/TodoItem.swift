@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
 
-struct TodoItem: StringIdentifiable {
+struct TodoItem: StringIdentifiable, Codable {
 
     let id: String
     let text: String
@@ -12,6 +12,7 @@ struct TodoItem: StringIdentifiable {
     let modifiedDate: Date?
     let color: String?
     let categoryId: String?
+    let files: [String]?
 
     init(
         id: String = UUID().uuidString,
@@ -22,7 +23,8 @@ struct TodoItem: StringIdentifiable {
         creationDate: Date = .now,
         modifiedDate: Date? = nil,
         color: String? = nil,
-        categoryId: String? = nil
+        categoryId: String? = nil,
+        files: [String]? = nil
     ) {
         self.id = id
         self.text = text
@@ -33,7 +35,20 @@ struct TodoItem: StringIdentifiable {
         self.modifiedDate = modifiedDate
         self.color = color
         self.categoryId = categoryId
+        self.files = files
     }
+
+    enum CodingKeys: String, CodingKey {
+        case id, text
+        case important = "importance"
+        case deadline
+        case isDone = "done"
+        case creationDate = "created_at"
+        case modifiedDate = "changed_at"
+        case color
+        case categoryId
+        case files
+            }
 
     func copyWith(
         text: String? = nil,
@@ -75,7 +90,7 @@ struct TodoItem: StringIdentifiable {
 
 extension TodoItem {
 
-    enum Importance: String, CaseIterable, Identifiable, Comparable {
+    enum Importance: String, CaseIterable, Identifiable, Comparable, Codable {
         private static func minimum(_ lhs: Self, _ rhs: Self) -> Self {
             switch (lhs, rhs) {
             case (.important, _), (_, .important): .important
@@ -88,7 +103,9 @@ extension TodoItem {
             (lhs != rhs) && (lhs == Self.minimum(lhs, rhs))
         }
 
-        case important, ordinary, unimportant
+        case important = "important"
+        case ordinary = "basic"
+        case unimportant = "low"
 
         var id: Self { self }
 
